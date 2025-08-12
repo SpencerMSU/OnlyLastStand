@@ -31,16 +31,20 @@ public class AccessoryMenu extends AbstractContainerMenu {
 
         final int SLOT_X_SPACING = 18;
         final int SLOT_Y_SPACING = 18;
-        final int START_X = 8;
+        final int GRID_WIDTH = 3 * SLOT_X_SPACING;
+        // Центрируем сетку 3x3 по горизонтали в стандартной панели шириной 176
+        final int START_X = (176 - GRID_WIDTH) / 2;
         final int START_Y = 18;
 
+        // Сетка аксессуаров 3x3
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 int index = j + i * 3;
-                addSlot(new AccessorySlot(accessoryInventory, index, START_X + 24 + j * SLOT_X_SPACING, START_Y + i * SLOT_Y_SPACING, slotOrder[index]));
+                addSlot(new AccessorySlot(accessoryInventory, index, START_X + j * SLOT_X_SPACING, START_Y + i * SLOT_Y_SPACING, slotOrder[index]));
             }
         }
 
+        // Инвентарь игрока
         int playerInvX = 8;
         int playerInvY = 86;
         for (int i = 0; i < 3; ++i) {
@@ -49,6 +53,7 @@ public class AccessoryMenu extends AbstractContainerMenu {
             }
         }
 
+        // Хотбар игрока
         for (int i = 0; i < 9; ++i) {
             this.addSlot(new Slot(playerInventory, i, playerInvX + i * 18, playerInvY + 58));
         }

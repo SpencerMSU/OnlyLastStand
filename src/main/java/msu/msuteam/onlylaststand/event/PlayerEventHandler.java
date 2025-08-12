@@ -13,9 +13,12 @@ import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.monster.Blaze;
+import net.minecraft.world.entity.monster.Ghast;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -23,7 +26,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.NeoForgeMod;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
-import net.neoforged.neoforge.event.entity.living.LivingHurtEvent;
+import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 
 import java.util.HashMap;
@@ -37,7 +40,6 @@ public class PlayerEventHandler {
     private static final ResourceLocation FIRE_SET_NETHER_BONUS_ID = ResourceLocation.fromNamespaceAndPath(OnlyLastStand.MODID, "fire_set_nether_bonus");
     private static final ResourceLocation WATER_SET_SWIM_SPEED_ID = ResourceLocation.fromNamespaceAndPath(OnlyLastStand.MODID, "water_set_swim_speed");
 
-    // Вызывается при входе в мир, респавне и смене измерения
     @SubscribeEvent
     public static void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
         updateAllPlayerModifiers(event.getEntity());
@@ -62,17 +64,14 @@ public class PlayerEventHandler {
         }
     }
 
-    // Главный метод, который вызывается, когда нужно обновить все баффы
     public static void updateAllPlayerModifiers(Player player) {
         if (player.level().isClientSide) return;
 
-        // --- Удаляем старые атрибуты ---
         Multimap<Holder<Attribute>, AttributeModifier> lastMods = lastAppliedModifiers.get(player.getUUID());
         if (lastMods != null && !lastMods.isEmpty()) {
             player.getAttributes().removeAttributeModifiers(lastMods);
         }
 
-        // --- Собираем новые атрибуты ---
         Multimap<Holder<Attribute>, AttributeModifier> currentMods = HashMultimap.create();
         AccessoryInventory inventory = player.getData(ModAttachments.ACCESSORY_INVENTORY);
         if (inventory == null) return;
@@ -87,7 +86,6 @@ public class PlayerEventHandler {
             }
         }
 
-        // --- Добавляем сетовые бонусы атрибутов ---
         if (isWearingFullSet(player, CollectionType.FIRE) && player.level().dimension().equals(Level.NETHER)) {
             AttributeModifier netherBonus = new AttributeModifier(
                     FIRE_SET_NETHER_BONUS_ID, 0.15, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL
@@ -100,52 +98,60 @@ public class PlayerEventHandler {
             currentMods.put(NeoForgeMod.SWIM_SPEED, swimSpeedBonus);
         }
 
-        // --- Применяем новые атрибуты ---
         if (!currentMods.isEmpty()) {
             player.getAttributes().addTransientAttributeModifiers(currentMods);
         }
 
-        // --- Применяем эффекты зелий ---
         handlePotionEffects(player);
-
-        // --- Сохраняем состояние ---
         lastAppliedModifiers.put(player.getUUID(), currentMods);
     }
 
     private static void handlePotionEffects(Player player) {
-        // Сначала удаляем эффекты, чтобы они не накапливались, если сет снят
         player.removeEffect(MobEffects.FIRE_RESISTANCE);
         player.removeEffect(MobEffects.WATER_BREATHING);
 
-        if (isWearingFullSet(player, CollectionType.FIRE)) {
-            // Даем бесконечный эффект Огнестойкости
-            player.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, -1, 0, false, false, true));
-        } else if (isWearingFullSet(player, CollectionType.WATER)) {
-            // ИСПРАВЛЕНО: Даем бесконечный эффект "Подводное дыхание"
+        if (isWearingFullSet(player, CollectionType.WATER)) {
             player.addEffect(new MobEffectInstance(MobEffects.WATER_BREATHING, -1, 0, false, false, true));
         }
     }
 
-    // Обработчик урона
     @SubscribeEvent
-    public static void onLivingHurt(LivingHurtEvent event) {
-        // Огненный сет
-        if (event.getEntity() instanceof Player player && isWearingFullSet(player, CollectionType.FIRE)) {
-            if (event.getSource().is(DamageTypes.IN_FIRE) || event.getSource().is(DamageTypes.ON_FIRE) || event.getSource().is(DamageTypes.LAVA)) {
-                event.setCanceled(true);
-                player.clearFire();
+    public static void onLivingIncomingDamage(LivingIncomingDamageEvent event) {
+        if (!(event.getEntity() instanceof Player player)) {
+            return;
+        }
+
+        if (isWearingFullSet(player, CollectionType.FIRE)) {
+            // Дебафф: Увеличенный урон от падения
+            if (event.getSource().is(DamageTypes.FALL)) {
+                event.setAmount(event.getAmount() * 1.13f); // +13% урона
+                return; // Выходим, чтобы другие защиты не применялись к урону от падения
+            }
+
+            // Защита от Гастов и Блейзов
+            if (event.getSource().getEntity() instanceof Ghast || event.getSource().getEntity() instanceof Blaze) {
+                event.setAmount(event.getAmount() * 0.65f); // -35% урона
+            }
+            // Защита от других мобов в Аду
+            else if (player.level().dimension().equals(Level.NETHER) && event.getSource().getEntity() instanceof Mob) {
+                event.setAmount(event.getAmount() * 0.85f); // -15% урона
+            }
+            // Защита от лавы
+            else if (event.getSource().is(DamageTypes.LAVA)) {
+                event.setAmount(event.getAmount() * 0.30f); // -70% урона
             }
         }
 
         // Водный сет
-        if (event.getSource().getEntity() instanceof Player player && event.getEntity() instanceof LivingEntity target && isWearingFullSet(player, CollectionType.WATER)) {
-            if (player.isInWaterOrRain() && target.isInWaterOrRain()) {
-                event.setAmount(event.getAmount() * 1.5f);
+        if (isWearingFullSet(player, CollectionType.WATER)) {
+            if (event.getSource().getEntity() instanceof Player sourcePlayer && event.getEntity() instanceof LivingEntity target) {
+                if (sourcePlayer.isInWaterOrRain() && target.isInWaterOrRain()) {
+                    event.setAmount(event.getAmount() * 1.5f);
+                }
             }
         }
     }
 
-    // Вспомогательный метод для проверки сета
     public static boolean isWearingFullSet(Player player, CollectionType collection) {
         AccessoryInventory inventory = player.getData(ModAttachments.ACCESSORY_INVENTORY);
         if (inventory == null) return false;

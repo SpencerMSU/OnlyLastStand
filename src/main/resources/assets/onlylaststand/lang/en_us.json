@@ -52,6 +52,10 @@
   "collection.onlylaststand.fire": "§cFire Set",
   "collection.onlylaststand.water": "Water Set",
 
-  "setbonus.onlylaststand.fire_new1": "§7- Full Fire Immunity",
-  "setbonus.onlylaststand.fire_new2": "§7- +15% Damage in Nether"
+  "setbonus.onlylaststand.fire_new1": "§7- 15% less damage from mobs in the Nether",
+  "setbonus.onlylaststand.fire_new2": "§7- 35% less damage from Ghasts and Blazes",
+  "setbonus.onlylaststand.fire_new3": "§7- 70% less damage from lava",
+  "setbonus.onlylaststand.fire_debuff1": "§c- 13% increased fall damage",
+  "tooltip.onlylaststand.buff.attack_knockback": "§3+%s Attack Knockback",
+  "tooltip.onlylaststand.buff.dig_speed": "§e+%s Dig Speed"
 }

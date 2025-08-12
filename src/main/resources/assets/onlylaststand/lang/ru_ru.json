@@ -62,10 +62,14 @@
   "collection.onlylaststand.fire": "§cОгненный сет",
   "collection.onlylaststand.water": "§9Водный сет",
 
-  "setbonus.onlylaststand.fire_new1": "§7- Полный иммунитет к огню",
-  "setbonus.onlylaststand.fire_new2": "§7- +15% к урону в Аду",
+  "setbonus.onlylaststand.fire_new1": "§7- 15% меньше урона от мобов в Аду",
+  "setbonus.onlylaststand.fire_new2": "§7- 35% меньше урона от Гастов и Блейзов",
+  "setbonus.onlylaststand.fire_new3": "§7- 70% меньше урона от лавы",
+  "setbonus.onlylaststand.fire_debuff1": "§c- 13% больше урона от падения",
 
   "setbonus.onlylaststand.water1": "§7- Бесконечное дыхание под водой",
   "setbonus.onlylaststand.water2": "§7- +15% к скорости плавания",
-  "setbonus.onlylaststand.water3": "§7- +50% урона целям в воде"
+  "setbonus.onlylaststand.water3": "§7- +50% урона целям в воде",
+  "tooltip.onlylaststand.buff.attack_knockback": "§3+%s к отбрасыванию",
+  "tooltip.onlylaststand.buff.dig_speed": "§e+%s к скорости копания"
 }
