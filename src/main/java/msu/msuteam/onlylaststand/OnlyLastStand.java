@@ -38,6 +38,15 @@ public class OnlyLastStand {
 
                 // Уникальные аксессуары
                 output.accept(ModItems.SPEED_RING.get());
+                output.accept(ModItems.CROWN_OF_RESILIENCE.get());
+                output.accept(ModItems.AMULET_OF_VITALITY.get());
+                output.accept(ModItems.PAULDRON_OF_FORTITUDE.get());
+                output.accept(ModItems.SPAULDER_OF_PROTECTION.get());
+                output.accept(ModItems.GAUNTLETS_OF_ALACRITY.get());
+                output.accept(ModItems.BAND_OF_REACH.get());
+                output.accept(ModItems.SPEED_RING.get());
+                output.accept(ModItems.VAMBRACE_OF_STRENGTH.get());
+                output.accept(ModItems.GREAVES_OF_SAFETY.get());
 
             }).build());
 

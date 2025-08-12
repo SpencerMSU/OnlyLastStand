@@ -30,5 +30,13 @@
   "slot.onlylaststand.ring_set": "Rings",
   "slot.onlylaststand.signet": "Signet",
   "slot.onlylaststand.elbow_pads": "Elbow",
-  "slot.onlylaststand.knee_pads": "Knees"
+  "slot.onlylaststand.knee_pads": "Knees",
+  "item.onlylaststand.crown_of_resilience": "Crown of Resilience",
+  "item.onlylaststand.amulet_of_vitality": "Amulet of Vitality",
+  "item.onlylaststand.pauldron_of_fortitude": "Pauldron of Fortitude",
+  "item.onlylaststand.spaulder_of_protection": "Spaulder of Protection",
+  "item.onlylaststand.gauntlets_of_alacrity": "Gauntlets of Alacrity",
+  "item.onlylaststand.band_of_reach": "Band of Reach",
+  "item.onlylaststand.vambrace_of_strength": "Vambrace of Strength",
+  "item.onlylaststand.greaves_of_safety": "Greaves of Safety"
 }

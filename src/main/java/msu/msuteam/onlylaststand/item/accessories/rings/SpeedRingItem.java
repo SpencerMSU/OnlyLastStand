@@ -1,7 +1,8 @@
-package msu.msuteam.onlylaststand.item.accessories;
+package msu.msuteam.onlylaststand.item.accessories.rings;
 
 import msu.msuteam.onlylaststand.OnlyLastStand;
 import msu.msuteam.onlylaststand.component.ModDataComponents;
+import msu.msuteam.onlylaststand.item.accessories.AccessoryItem;
 import msu.msuteam.onlylaststand.util.Rarity;
 import msu.msuteam.onlylaststand.util.SlotType;
 import net.minecraft.network.chat.Component;

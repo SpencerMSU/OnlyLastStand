@@ -30,5 +30,13 @@
   "slot.onlylaststand.ring_set": "Кольца",
   "slot.onlylaststand.signet": "Перстень",
   "slot.onlylaststand.elbow_pads": "Налокотники",
-  "slot.onlylaststand.knee_pads": "Наколенники"
+  "slot.onlylaststand.knee_pads": "Наколенники",
+  "item.onlylaststand.crown_of_resilience": "Корона стойкости",
+  "item.onlylaststand.amulet_of_vitality": "Амулет живучести",
+  "item.onlylaststand.pauldron_of_fortitude": "Наплечник силы духа",
+  "item.onlylaststand.spaulder_of_protection": "Эполет защиты",
+  "item.onlylaststand.gauntlets_of_alacrity": "Латные перчатки проворства",
+  "item.onlylaststand.band_of_reach": "Кольцо досягаемости",
+  "item.onlylaststand.vambrace_of_strength": "Наруч силы",
+  "item.onlylaststand.greaves_of_safety": "Наголенники безопасности"
 }
