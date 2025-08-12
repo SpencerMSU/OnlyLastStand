@@ -1,0 +1,34 @@
+{
+  "itemGroup.onlylaststand": "OnlyLastStand",
+  "container.onlylaststand.accessories": "Аксессуары",
+  "key.category.onlylaststand": "OnlyLastStand",
+  "key.onlylaststand.open_accessory_inventory": "Открыть инвентарь аксессуаров",
+
+  "item.onlylaststand.upgrade_shard": "Осколок камня прокачки",
+  "item.onlylaststand.upgrade_stone": "Камень прокачки аксессуара",
+  "item.onlylaststand.synergy_stone": "Камень синергии",
+  "item.onlylaststand.speed_ring": "Перстень скорости",
+
+  "rarity.onlylaststand.common": "Обычная",
+  "rarity.onlylaststand.rare": "Редкая",
+  "rarity.onlylaststand.epic": "Эпическая",
+  "rarity.onlylaststand.legendary": "Легендарная",
+  "rarity.onlylaststand.mythic": "Мифическая",
+  "rarity.onlylaststand.absolute": "Абсолютная",
+
+  "tooltip.onlylaststand.rarity": "Редкость: %s",
+  "tooltip.onlylaststand.level": "Уровень: %s/10",
+  "tooltip.onlylaststand.slot": "Слот: %s",
+  "tooltip.onlylaststand.buff.speed": "§a+%s к скорости передвижения",
+  "tooltip.onlylaststand.buffs_placeholder": "Нет особых эффектов",
+
+  "slot.onlylaststand.head": "Голова",
+  "slot.onlylaststand.neck": "Шея",
+  "slot.onlylaststand.right_shoulder": "Пр. плечо",
+  "slot.onlylaststand.left_shoulder": "Лев. плечо",
+  "slot.onlylaststand.gloves": "Перчатки",
+  "slot.onlylaststand.ring_set": "Кольца",
+  "slot.onlylaststand.signet": "Перстень",
+  "slot.onlylaststand.elbow_pads": "Налокотники",
+  "slot.onlylaststand.knee_pads": "Наколенники"
+}

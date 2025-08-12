@@ -29,7 +29,16 @@ public class OnlyLastStand {
             .title(Component.translatable("itemGroup.onlylaststand"))
             .icon(() -> ModItems.SYNERGY_STONE.get().getDefaultInstance())
             .displayItems((parameters, output) -> {
-                ModItems.ITEMS.getEntries().forEach(item -> output.accept(item.get()));
+                // --- Добавляем только нужные предметы ---
+
+                // Материалы
+                output.accept(ModItems.UPGRADE_SHARD.get());
+                output.accept(ModItems.UPGRADE_STONE.get());
+                output.accept(ModItems.SYNERGY_STONE.get());
+
+                // Уникальные аксессуары
+                output.accept(ModItems.SPEED_RING.get());
+
             }).build());
 
     public OnlyLastStand(IEventBus modEventBus, ModContainer modContainer) {

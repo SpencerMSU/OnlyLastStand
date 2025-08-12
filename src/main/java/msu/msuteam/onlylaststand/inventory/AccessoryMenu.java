@@ -1,6 +1,7 @@
 package msu.msuteam.onlylaststand.inventory;
 
 import msu.msuteam.onlylaststand.core.ModMenuTypes;
+import msu.msuteam.onlylaststand.util.SlotType;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -14,31 +15,32 @@ public class AccessoryMenu extends AbstractContainerMenu {
     public static final int SLOTS = 9;
     private final AccessoryInventory accessoryInventory;
 
-    // Этот конструктор вызывается, когда меню открывается с клиента
     public AccessoryMenu(int pContainerId, Inventory playerInventory, FriendlyByteBuf extraData) {
         this(pContainerId, playerInventory, playerInventory.player.getData(ModAttachments.ACCESSORY_INVENTORY));
     }
 
-    // Этот конструктор является основным и вызывается на сервере
     public AccessoryMenu(int pContainerId, Inventory playerInventory, AccessoryInventory accessoryInventory) {
         super(ModMenuTypes.ACCESSORY_MENU.get(), pContainerId);
         this.accessoryInventory = accessoryInventory;
 
-        // Координаты слотов на экране GUI
+        final SlotType[] slotOrder = {
+                SlotType.HEAD, SlotType.NECK, SlotType.RIGHT_SHOULDER,
+                SlotType.LEFT_SHOULDER, SlotType.GLOVES, SlotType.RING_SET,
+                SlotType.SIGNET, SlotType.ELBOW_PADS, SlotType.KNEE_PADS
+        };
+
         final int SLOT_X_SPACING = 18;
         final int SLOT_Y_SPACING = 18;
         final int START_X = 8;
         final int START_Y = 18;
 
-        // Слоты для аксессуаров (3x3)
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                // Мы используем SlotItemHandler, так как наш инвентарь - это ItemStackHandler
-                addSlot(new SlotItemHandler(accessoryInventory, j + i * 3, START_X + 24 + j * SLOT_X_SPACING, START_Y + i * SLOT_Y_SPACING));
+                int index = j + i * 3;
+                addSlot(new AccessorySlot(accessoryInventory, index, START_X + 24 + j * SLOT_X_SPACING, START_Y + i * SLOT_Y_SPACING, slotOrder[index]));
             }
         }
 
-        // Инвентарь игрока (основная часть)
         int playerInvX = 8;
         int playerInvY = 86;
         for (int i = 0; i < 3; ++i) {
@@ -47,20 +49,17 @@ public class AccessoryMenu extends AbstractContainerMenu {
             }
         }
 
-        // Хотбар игрока
         for (int i = 0; i < 9; ++i) {
             this.addSlot(new Slot(playerInventory, i, playerInvX + i * 18, playerInvY + 58));
         }
     }
 
-    // Метод для получения инвентаря аксессуаров, нужен для AccessoryScreen
     public AccessoryInventory getAccessoryInventory() {
         return this.accessoryInventory;
     }
 
     @Override
     public @NotNull ItemStack quickMoveStack(@NotNull Player player, int index) {
-        // Логика для Shift-клика
         Slot sourceSlot = slots.get(index);
         if (sourceSlot == null || !sourceSlot.hasItem()) {
             return ItemStack.EMPTY;
@@ -68,15 +67,11 @@ public class AccessoryMenu extends AbstractContainerMenu {
         ItemStack sourceStack = sourceSlot.getItem();
         ItemStack copyStack = sourceStack.copy();
 
-        // Перемещение из инвентаря аксессуаров в инвентарь игрока
         if (index < SLOTS) {
             if (!this.moveItemStackTo(sourceStack, SLOTS, this.slots.size(), true)) {
                 return ItemStack.EMPTY;
             }
-        }
-        // Перемещение из инвентаря игрока в инвентарь аксессуаров
-        else {
-            // TODO: В будущем добавить проверку, подходит ли предмет для слота
+        } else {
             if (!this.moveItemStackTo(sourceStack, 0, SLOTS, false)) {
                 return ItemStack.EMPTY;
             }

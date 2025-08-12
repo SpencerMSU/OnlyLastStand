@@ -25,9 +25,7 @@ public class AccessoryDropModifier extends LootModifier {
     private static final Random random = new Random();
 
     private static final List<DeferredItem<Item>> ACCESSORY_POOL = List.of(
-            ModItems.HAT_ACCESSORY, ModItems.NECKLACE_ACCESSORY, ModItems.RIGHT_SHOULDER_ACCESSORY,
-            ModItems.LEFT_SHOULDER_ACCESSORY, ModItems.GLOVES_ACCESSORY, ModItems.RING_SET_ACCESSORY,
-            ModItems.SPEED_RING, ModItems.ELBOW_PAD_ACCESSORY, ModItems.KNEE_PAD_ACCESSORY
+            ModItems.SPEED_RING
     );
 
     public AccessoryDropModifier(LootItemCondition[] conditionsIn) {
