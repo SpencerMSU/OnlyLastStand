@@ -1,7 +1,5 @@
 package msu.msuteam.onlylaststand.event;
 
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
 import msu.msuteam.onlylaststand.OnlyLastStand;
 import msu.msuteam.onlylaststand.inventory.AccessoryInventory;
 import msu.msuteam.onlylaststand.inventory.ModAttachments;
@@ -19,9 +17,6 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
 
 @EventBusSubscriber(modid = OnlyLastStand.MODID)
 public class AttributeManager {
@@ -39,24 +34,9 @@ public class AttributeManager {
         AccessoryInventory inventory = player.getData(ModAttachments.ACCESSORY_INVENTORY);
         if (inventory == null) return;
 
-        // --- Шаг 1: Собираем все атрибуты и суммируем их значения по типам ---
-        Map<Holder<Attribute>, Double> combinedValues = new HashMap<>();
-        Map<Holder<Attribute>, AttributeModifier.Operation> operations = new HashMap<>();
-
-        for (int i = 0; i < inventory.getSlots(); i++) {
-            ItemStack stack = inventory.getStackInSlot(i);
-            if (stack.getItem() instanceof AccessoryItem) {
-                ItemAttributeModifiers itemModifiers = stack.getItem().getDefaultAttributeModifiers(stack);
-                itemModifiers.modifiers().forEach(entry -> {
-                    Holder<Attribute> attribute = entry.attribute();
-                    AttributeModifier modifier = entry.modifier();
-                    combinedValues.merge(attribute, modifier.amount(), Double::sum);
-                    operations.putIfAbsent(attribute, modifier.operation());
-                });
-            }
-        }
-
-        // --- Шаг 2: Удаляем ВСЕ наши старые модификаторы ---
+        // --- Шаг 1: Удаляем ВСЕ старые модификаторы от аксессуаров ---
+        // Мы ищем все модификаторы, ID которых начинается с "onlylaststand_", и удаляем их.
+        // Это гарантирует полную очистку перед добавлением новых.
         player.getAttributes().getSyncableAttributes().forEach(attributeInstance -> {
             new ArrayList<>(attributeInstance.getModifiers()).forEach(modifier -> {
                 if (modifier.id().getNamespace().equals(OnlyLastStand.MODID)) {
@@ -65,24 +45,35 @@ public class AttributeManager {
             });
         });
 
-        // --- Шаг 3: Применяем новые, объединенные модификаторы как ПОСТОЯННЫЕ ---
-        for (Map.Entry<Holder<Attribute>, Double> entry : combinedValues.entrySet()) {
-            Holder<Attribute> attributeHolder = entry.getKey();
-            double totalValue = entry.getValue();
-            AttributeModifier.Operation operation = operations.get(attributeHolder);
-            AttributeInstance instance = player.getAttribute(attributeHolder);
+        // --- Шаг 2: Применяем новые модификаторы для каждого слота индивидуально ---
+        // Это ключевое изменение. Мы больше не суммируем баффы, а добавляем их по отдельности.
+        for (int i = 0; i < inventory.getSlots(); i++) {
+            ItemStack stack = inventory.getStackInSlot(i);
+            if (stack.getItem() instanceof AccessoryItem) {
+                ItemAttributeModifiers itemModifiers = stack.getItem().getDefaultAttributeModifiers(stack);
 
-            if (instance != null && operation != null) {
-                // ИСПРАВЛЕНО: Правильный способ получить ResourceLocation из Holder
-                ResourceLocation attributeId = attributeHolder.unwrapKey().orElseThrow().location();
-                ResourceLocation modifierId = attributeId.withPrefix("onlylaststand_");
+                // Для каждого баффа от предмета...
+                itemModifiers.modifiers().forEach(entry -> {
+                    Holder<Attribute> attributeHolder = entry.attribute();
+                    AttributeModifier modifier = entry.modifier();
+                    AttributeInstance instance = player.getAttribute(attributeHolder);
 
-                AttributeModifier newModifier = new AttributeModifier(
-                        modifierId,
-                        totalValue,
-                        operation
-                );
-                instance.addPermanentModifier(newModifier);
+                    if (instance != null) {
+                        // Создаем УНИКАЛЬНЫЙ ID для каждого слота
+                        // Например: "onlylaststand:speed_ring_bonus_slot_6"
+                        ResourceLocation uniqueModifierId = modifier.id().withPath(p -> p + "_slot_" + i);
+
+                        // Создаем новый модификатор с этим уникальным ID
+                        AttributeModifier newModifier = new AttributeModifier(
+                                uniqueModifierId,
+                                modifier.amount(),
+                                modifier.operation()
+                        );
+
+                        // Добавляем его как постоянный. Так как ID уникален, краша не будет.
+                        instance.addPermanentModifier(newModifier);
+                    }
+                });
             }
         }
     }
