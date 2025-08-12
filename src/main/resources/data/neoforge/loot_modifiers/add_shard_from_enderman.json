@@ -1,0 +1,16 @@
+{
+  "type": "onlylaststand:add_shard",
+  "conditions": [
+    {
+      "condition": "neoforge:killed_by_player"
+    },
+    {
+      "condition": "neoforge:entity_properties",
+      "entity": "this",
+      "predicate": {
+        "type": "minecraft:enderman"
+      }
+    }
+  ],
+  "chance": 0.70
+}

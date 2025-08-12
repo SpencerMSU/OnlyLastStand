@@ -1,0 +1,33 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "onlylaststand:upgrade_shard"
+    },
+    {
+      "item": "onlylaststand:upgrade_shard"
+    },
+    {
+      "item": "onlylaststand:upgrade_shard"
+    },
+    {
+      "item": "onlylaststand:upgrade_shard"
+    },
+    {
+      "item": "onlylaststand:upgrade_shard"
+    },
+    {
+      "item": "onlylaststand:upgrade_shard"
+    },
+    {
+      "item": "onlylaststand:upgrade_shard"
+    },
+    {
+      "item": "onlylaststand:upgrade_shard"
+    }
+  ],
+  "result": {
+    "item": "onlylaststand:upgrade_stone",
+    "count": 1
+  }
+}

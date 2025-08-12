@@ -1,0 +1,18 @@
+{
+  "type": "onlylaststand:add_shard",
+  "conditions": [
+    {
+      "condition": "neoforge:killed_by_player"
+    },
+    {
+      "condition": "neoforge:entity_properties",
+      "entity": "this",
+      "predicate": {
+        "type_specific": {
+          "type": "monster"
+        }
+      }
+    }
+  ],
+  "chance": 0.05
+}

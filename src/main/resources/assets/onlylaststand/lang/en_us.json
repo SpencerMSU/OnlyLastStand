@@ -1,0 +1,29 @@
+{
+  "itemGroup.onlylaststand": "OnlyLastStand",
+
+  "item.onlylaststand.upgrade_shard": "Upgrade Shard",
+  "item.onlylaststand.upgrade_stone": "Upgrade Stone",
+  "item.onlylaststand.synergy_stone": "Synergy Stone",
+
+  "item.onlylaststand.hat_accessory": "Hat",
+  "item.onlylaststand.necklace_accessory": "Necklace",
+  "item.onlylaststand.right_shoulder_accessory": "Right Shoulder Pauldron",
+  "item.onlylaststand.left_shoulder_accessory": "Left Shoulder Pauldron",
+  "item.onlylaststand.gloves_accessory": "Gloves",
+  "item.onlylaststand.ring_set_accessory": "Ring Set",
+  "item.onlylaststand.speed_ring": "Ring of Speed",
+  "item.onlylaststand.elbow_pad_accessory": "Elbow Pad",
+  "item.onlylaststand.knee_pad_accessory": "Knee Pad",
+
+  "rarity.onlylaststand.common": "Common",
+  "rarity.onlylaststand.rare": "Rare",
+  "rarity.onlylaststand.epic": "Epic",
+  "rarity.onlylaststand.legendary": "Legendary",
+  "rarity.onlylaststand.mythic": "Mythic",
+  "rarity.onlylaststand.absolute": "Absolute",
+
+  "tooltip.onlylaststand.rarity": "Rarity: %s",
+  "tooltip.onlylaststand.level": "Level: %s/10",
+  "tooltip.onlylaststand.buffs_placeholder": "Buffs: (coming soon)",
+  "tooltip.onlylaststand.buff.speed": "§a+%s Movement Speed"
+}

@@ -1,0 +1,17 @@
+{
+  "type": "onlylaststand:add_accessory",
+  "conditions": [
+    {
+      "condition": "neoforge:killed_by_player"
+    },
+    {
+      "condition": "neoforge:entity_properties",
+      "entity": "this",
+      "predicate": {
+        "type_specific": {
+          "type": "monster"
+        }
+      }
+    }
+  ]
+}
