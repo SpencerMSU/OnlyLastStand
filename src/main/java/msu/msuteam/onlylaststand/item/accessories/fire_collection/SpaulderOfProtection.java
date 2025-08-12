@@ -1,8 +1,9 @@
-package msu.msuteam.onlylaststand.item.accessories.rings;
+package msu.msuteam.onlylaststand.item.accessories.fire_collection;
 
 import msu.msuteam.onlylaststand.OnlyLastStand;
 import msu.msuteam.onlylaststand.component.ModDataComponents;
 import msu.msuteam.onlylaststand.item.accessories.AccessoryItem;
+import msu.msuteam.onlylaststand.util.CollectionType;
 import msu.msuteam.onlylaststand.util.Rarity;
 import msu.msuteam.onlylaststand.util.SlotType;
 import net.minecraft.network.chat.Component;
@@ -17,12 +18,11 @@ import net.minecraft.world.item.component.ItemAttributeModifiers;
 
 import java.util.List;
 
-public class BandOfReach extends AccessoryItem {
-    private static final ResourceLocation BLOCK_REACH_ID = ResourceLocation.fromNamespaceAndPath(OnlyLastStand.MODID, "band_block_reach");
-    private static final ResourceLocation ENTITY_REACH_ID = ResourceLocation.fromNamespaceAndPath(OnlyLastStand.MODID, "band_entity_reach");
+public class SpaulderOfProtection extends AccessoryItem {
+    private static final ResourceLocation ARMOR_TOUGHNESS_ID = ResourceLocation.fromNamespaceAndPath(OnlyLastStand.MODID, "spaulder_armor_toughness");
 
-    public BandOfReach(Properties pProperties) {
-        super(pProperties, SlotType.RING_SET);
+    public SpaulderOfProtection(Properties pProperties) {
+        super(pProperties, SlotType.LEFT_SHOULDER, CollectionType.FIRE);
     }
 
     @Override
@@ -30,8 +30,8 @@ public class BandOfReach extends AccessoryItem {
         Rarity rarity = stack.get(ModDataComponents.ACCESSORY_RARITY);
         int level = stack.get(ModDataComponents.ACCESSORY_LEVEL);
         if (rarity == null) rarity = Rarity.COMMON;
-        double bonus = (0.5 + (level * 0.1)) * rarity.getMultiplier();
-        return ItemAttributeModifiers.builder().add(Attributes.BLOCK_INTERACTION_RANGE, new AttributeModifier(BLOCK_REACH_ID, bonus, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.ANY).add(Attributes.ENTITY_INTERACTION_RANGE, new AttributeModifier(ENTITY_REACH_ID, bonus, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.ANY).build();
+        double bonus = (1.0 + (level * 0.1)) * rarity.getMultiplier();
+        return ItemAttributeModifiers.builder().add(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(ARMOR_TOUGHNESS_ID, bonus, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.ANY).build();
     }
 
     @Override
@@ -41,7 +41,7 @@ public class BandOfReach extends AccessoryItem {
         Rarity rarity = pStack.get(ModDataComponents.ACCESSORY_RARITY);
         int level = pStack.get(ModDataComponents.ACCESSORY_LEVEL);
         if (rarity == null) rarity = Rarity.COMMON;
-        double bonus = (0.5 + (level * 0.1)) * rarity.getMultiplier();
-        pTooltipComponents.add(Component.translatable("tooltip.onlylaststand.buff.reach", String.format("+%.1f", bonus)));
+        double bonus = (1.0 + (level * 0.1)) * rarity.getMultiplier();
+        pTooltipComponents.add(Component.translatable("tooltip.onlylaststand.buff.armor_toughness", String.format("+%.1f", bonus)));
     }
 }

@@ -1,16 +1,14 @@
 package msu.msuteam.onlylaststand.client;
 
 import msu.msuteam.onlylaststand.inventory.AccessoryMenu;
+import msu.msuteam.onlylaststand.util.CollectionType;
+import msu.msuteam.onlylaststand.event.PlayerEventHandler;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
 public class AccessoryScreen extends AbstractContainerScreen<AccessoryMenu> {
-
-    // Эта переменная больше не нужна, так как мы не используем текстуру
-    // private static final ResourceLocation TEXTURE = ...;
 
     public AccessoryScreen(AccessoryMenu pMenu, Inventory pPlayerInventory, Component pTitle) {
         super(pMenu, pPlayerInventory, pTitle);
@@ -24,10 +22,8 @@ public class AccessoryScreen extends AbstractContainerScreen<AccessoryMenu> {
         int x = (this.width - this.imageWidth) / 2;
         int y = (this.height - this.imageHeight) / 2;
 
-        // ИСПРАВЛЕНО: Вместо текстуры рисуем красивый градиент
-        // Вы можете поменять цвета, как вам нравится. Формат ARGB (Альфа, Красный, Зеленый, Синий)
-        int topColor = 0xFF202020;    // Темно-серый, почти черный
-        int bottomColor = 0xFF404040; // Чуть более светлый серый
+        int topColor = 0xFF202020;
+        int bottomColor = 0xFF404040;
 
         pGuiGraphics.fillGradient(x, y, x + this.imageWidth, y + this.imageHeight, topColor, bottomColor);
     }
@@ -35,11 +31,25 @@ public class AccessoryScreen extends AbstractContainerScreen<AccessoryMenu> {
     @Override
     public void render(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
         super.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
-
-        // ИСПРАВЛЕНО: Убрана боковая панель, осталась только стандартная подсказка
         this.renderTooltip(pGuiGraphics, pMouseX, pMouseY);
-        // renderSideInfoPanel(pGuiGraphics, pMouseX, pMouseY); // <- Эта строка удалена
+        renderSetBonusInfo(pGuiGraphics);
     }
 
-    // Метод renderSideInfoPanel(...) полностью удален, так как он больше не нужен
+    private void renderSetBonusInfo(GuiGraphics graphics) {
+        if (this.minecraft == null || this.minecraft.player == null) return;
+
+        int x = this.leftPos + this.imageWidth + 5;
+        int y = this.topPos;
+
+        if (PlayerEventHandler.isWearingFullSet(this.minecraft.player, CollectionType.FIRE)) {
+            graphics.drawString(this.font, Component.translatable("collection.onlylaststand.fire"), x, y, 0xFF5555, false);
+            graphics.drawString(this.font, Component.translatable("setbonus.onlylaststand.fire_new1"), x, y + 12, 0xAAAAAA, false);
+            graphics.drawString(this.font, Component.translatable("setbonus.onlylaststand.fire_new2"), x, y + 22, 0xAAAAAA, false);
+        } else if (PlayerEventHandler.isWearingFullSet(this.minecraft.player, CollectionType.WATER)) {
+            graphics.drawString(this.font, Component.translatable("collection.onlylaststand.water"), x, y, 0x5555FF, false);
+            graphics.drawString(this.font, Component.translatable("setbonus.onlylaststand.water1"), x, y + 12, 0xAAAAAA, false);
+            graphics.drawString(this.font, Component.translatable("setbonus.onlylaststand.water2"), x, y + 22, 0xAAAAAA, false);
+            graphics.drawString(this.font, Component.translatable("setbonus.onlylaststand.water3"), x, y + 32, 0xAAAAAA, false);
+        }
+    }
 }

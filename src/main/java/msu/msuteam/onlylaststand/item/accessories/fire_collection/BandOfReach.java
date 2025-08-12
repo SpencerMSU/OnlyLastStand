@@ -1,8 +1,9 @@
-package msu.msuteam.onlylaststand.item.accessories.shoulder;
+package msu.msuteam.onlylaststand.item.accessories.fire_collection;
 
 import msu.msuteam.onlylaststand.OnlyLastStand;
 import msu.msuteam.onlylaststand.component.ModDataComponents;
 import msu.msuteam.onlylaststand.item.accessories.AccessoryItem;
+import msu.msuteam.onlylaststand.util.CollectionType;
 import msu.msuteam.onlylaststand.util.Rarity;
 import msu.msuteam.onlylaststand.util.SlotType;
 import net.minecraft.network.chat.Component;
@@ -17,11 +18,12 @@ import net.minecraft.world.item.component.ItemAttributeModifiers;
 
 import java.util.List;
 
-public class PauldronOfFortitude extends AccessoryItem {
-    private static final ResourceLocation ARMOR_ID = ResourceLocation.fromNamespaceAndPath(OnlyLastStand.MODID, "pauldron_armor");
+public class BandOfReach extends AccessoryItem {
+    private static final ResourceLocation BLOCK_REACH_ID = ResourceLocation.fromNamespaceAndPath(OnlyLastStand.MODID, "band_block_reach");
+    private static final ResourceLocation ENTITY_REACH_ID = ResourceLocation.fromNamespaceAndPath(OnlyLastStand.MODID, "band_entity_reach");
 
-    public PauldronOfFortitude(Properties pProperties) {
-        super(pProperties, SlotType.RIGHT_SHOULDER);
+    public BandOfReach(Properties pProperties) {
+        super(pProperties, SlotType.RING_SET, CollectionType.FIRE);
     }
 
     @Override
@@ -29,8 +31,8 @@ public class PauldronOfFortitude extends AccessoryItem {
         Rarity rarity = stack.get(ModDataComponents.ACCESSORY_RARITY);
         int level = stack.get(ModDataComponents.ACCESSORY_LEVEL);
         if (rarity == null) rarity = Rarity.COMMON;
-        double bonus = (2.0 + (level * 0.25)) * rarity.getMultiplier();
-        return ItemAttributeModifiers.builder().add(Attributes.ARMOR, new AttributeModifier(ARMOR_ID, bonus, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.ANY).build();
+        double bonus = (0.5 + (level * 0.1)) * rarity.getMultiplier();
+        return ItemAttributeModifiers.builder().add(Attributes.BLOCK_INTERACTION_RANGE, new AttributeModifier(BLOCK_REACH_ID, bonus, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.ANY).add(Attributes.ENTITY_INTERACTION_RANGE, new AttributeModifier(ENTITY_REACH_ID, bonus, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.ANY).build();
     }
 
     @Override
@@ -40,7 +42,7 @@ public class PauldronOfFortitude extends AccessoryItem {
         Rarity rarity = pStack.get(ModDataComponents.ACCESSORY_RARITY);
         int level = pStack.get(ModDataComponents.ACCESSORY_LEVEL);
         if (rarity == null) rarity = Rarity.COMMON;
-        double bonus = (2.0 + (level * 0.25)) * rarity.getMultiplier();
-        pTooltipComponents.add(Component.translatable("tooltip.onlylaststand.buff.armor", String.format("+%.2f", bonus)));
+        double bonus = (0.5 + (level * 0.1)) * rarity.getMultiplier();
+        pTooltipComponents.add(Component.translatable("tooltip.onlylaststand.buff.reach", String.format("+%.1f", bonus)));
     }
 }

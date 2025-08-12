@@ -1,8 +1,9 @@
-package msu.msuteam.onlylaststand.item.accessories.gloves;
+package msu.msuteam.onlylaststand.item.accessories.fire_collection;
 
 import msu.msuteam.onlylaststand.OnlyLastStand;
 import msu.msuteam.onlylaststand.component.ModDataComponents;
 import msu.msuteam.onlylaststand.item.accessories.AccessoryItem;
+import msu.msuteam.onlylaststand.util.CollectionType;
 import msu.msuteam.onlylaststand.util.Rarity;
 import msu.msuteam.onlylaststand.util.SlotType;
 import net.minecraft.network.chat.Component;
@@ -17,11 +18,11 @@ import net.minecraft.world.item.component.ItemAttributeModifiers;
 
 import java.util.List;
 
-public class GauntletsOfAlacrity extends AccessoryItem {
-    private static final ResourceLocation ATTACK_SPEED_ID = ResourceLocation.fromNamespaceAndPath(OnlyLastStand.MODID, "gauntlets_attack_speed");
+public class VambraceOfStrength extends AccessoryItem {
+    private static final ResourceLocation DAMAGE_ID = ResourceLocation.fromNamespaceAndPath(OnlyLastStand.MODID, "vambrace_damage");
 
-    public GauntletsOfAlacrity(Properties pProperties) {
-        super(pProperties, SlotType.GLOVES);
+    public VambraceOfStrength(Properties pProperties) {
+        super(pProperties, SlotType.ELBOW_PADS, CollectionType.FIRE);
     }
 
     @Override
@@ -29,8 +30,8 @@ public class GauntletsOfAlacrity extends AccessoryItem {
         Rarity rarity = stack.get(ModDataComponents.ACCESSORY_RARITY);
         int level = stack.get(ModDataComponents.ACCESSORY_LEVEL);
         if (rarity == null) rarity = Rarity.COMMON;
-        double bonus = (0.1 + (level * 0.01)) * rarity.getMultiplier();
-        return ItemAttributeModifiers.builder().add(Attributes.ATTACK_SPEED, new AttributeModifier(ATTACK_SPEED_ID, bonus, AttributeModifier.Operation.ADD_MULTIPLIED_BASE), EquipmentSlotGroup.ANY).build();
+        double bonus = (1.0 + (level * 0.2)) * rarity.getMultiplier();
+        return ItemAttributeModifiers.builder().add(Attributes.ATTACK_DAMAGE, new AttributeModifier(DAMAGE_ID, bonus, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.ANY).build();
     }
 
     @Override
@@ -40,7 +41,7 @@ public class GauntletsOfAlacrity extends AccessoryItem {
         Rarity rarity = pStack.get(ModDataComponents.ACCESSORY_RARITY);
         int level = pStack.get(ModDataComponents.ACCESSORY_LEVEL);
         if (rarity == null) rarity = Rarity.COMMON;
-        double bonus = (0.1 + (level * 0.01)) * rarity.getMultiplier();
-        pTooltipComponents.add(Component.translatable("tooltip.onlylaststand.buff.attack_speed", String.format("%.0f%%", bonus * 100)));
+        double bonus = (1.0 + (level * 0.2)) * rarity.getMultiplier();
+        pTooltipComponents.add(Component.translatable("tooltip.onlylaststand.buff.damage", String.format("+%.1f", bonus)));
     }
 }

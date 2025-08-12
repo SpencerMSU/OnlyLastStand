@@ -1,8 +1,9 @@
-package msu.msuteam.onlylaststand.item.accessories.elbow;
+package msu.msuteam.onlylaststand.item.accessories.fire_collection;
 
 import msu.msuteam.onlylaststand.OnlyLastStand;
 import msu.msuteam.onlylaststand.component.ModDataComponents;
 import msu.msuteam.onlylaststand.item.accessories.AccessoryItem;
+import msu.msuteam.onlylaststand.util.CollectionType;
 import msu.msuteam.onlylaststand.util.Rarity;
 import msu.msuteam.onlylaststand.util.SlotType;
 import net.minecraft.network.chat.Component;
@@ -17,11 +18,11 @@ import net.minecraft.world.item.component.ItemAttributeModifiers;
 
 import java.util.List;
 
-public class VambraceOfStrength extends AccessoryItem {
-    private static final ResourceLocation DAMAGE_ID = ResourceLocation.fromNamespaceAndPath(OnlyLastStand.MODID, "vambrace_damage");
+public class GreavesOfSafety extends AccessoryItem {
+    private static final ResourceLocation SAFE_FALL_ID = ResourceLocation.fromNamespaceAndPath(OnlyLastStand.MODID, "greaves_safe_fall");
 
-    public VambraceOfStrength(Properties pProperties) {
-        super(pProperties, SlotType.ELBOW_PADS);
+    public GreavesOfSafety(Properties pProperties) {
+        super(pProperties, SlotType.KNEE_PADS, CollectionType.FIRE);
     }
 
     @Override
@@ -29,8 +30,8 @@ public class VambraceOfStrength extends AccessoryItem {
         Rarity rarity = stack.get(ModDataComponents.ACCESSORY_RARITY);
         int level = stack.get(ModDataComponents.ACCESSORY_LEVEL);
         if (rarity == null) rarity = Rarity.COMMON;
-        double bonus = (1.0 + (level * 0.2)) * rarity.getMultiplier();
-        return ItemAttributeModifiers.builder().add(Attributes.ATTACK_DAMAGE, new AttributeModifier(DAMAGE_ID, bonus, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.ANY).build();
+        double bonus = (2.0 + (level * 0.5)) * rarity.getMultiplier();
+        return ItemAttributeModifiers.builder().add(Attributes.SAFE_FALL_DISTANCE, new AttributeModifier(SAFE_FALL_ID, bonus, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.ANY).build();
     }
 
     @Override
@@ -40,7 +41,7 @@ public class VambraceOfStrength extends AccessoryItem {
         Rarity rarity = pStack.get(ModDataComponents.ACCESSORY_RARITY);
         int level = pStack.get(ModDataComponents.ACCESSORY_LEVEL);
         if (rarity == null) rarity = Rarity.COMMON;
-        double bonus = (1.0 + (level * 0.2)) * rarity.getMultiplier();
-        pTooltipComponents.add(Component.translatable("tooltip.onlylaststand.buff.damage", String.format("+%.1f", bonus)));
+        double bonus = (2.0 + (level * 0.5)) * rarity.getMultiplier();
+        pTooltipComponents.add(Component.translatable("tooltip.onlylaststand.buff.safe_fall", String.format("+%.1f", bonus)));
     }
 }

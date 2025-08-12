@@ -1,8 +1,9 @@
-package msu.msuteam.onlylaststand.item.accessories.shoulder;
+package msu.msuteam.onlylaststand.item.accessories.fire_collection;
 
 import msu.msuteam.onlylaststand.OnlyLastStand;
 import msu.msuteam.onlylaststand.component.ModDataComponents;
 import msu.msuteam.onlylaststand.item.accessories.AccessoryItem;
+import msu.msuteam.onlylaststand.util.CollectionType;
 import msu.msuteam.onlylaststand.util.Rarity;
 import msu.msuteam.onlylaststand.util.SlotType;
 import net.minecraft.network.chat.Component;
@@ -17,11 +18,11 @@ import net.minecraft.world.item.component.ItemAttributeModifiers;
 
 import java.util.List;
 
-public class SpaulderOfProtection extends AccessoryItem {
-    private static final ResourceLocation ARMOR_TOUGHNESS_ID = ResourceLocation.fromNamespaceAndPath(OnlyLastStand.MODID, "spaulder_armor_toughness");
+public class CrownOfResilience extends AccessoryItem {
+    private static final ResourceLocation KB_RESISTANCE_ID = ResourceLocation.fromNamespaceAndPath(OnlyLastStand.MODID, "crown_kb_resistance");
 
-    public SpaulderOfProtection(Properties pProperties) {
-        super(pProperties, SlotType.LEFT_SHOULDER);
+    public CrownOfResilience(Properties pProperties) {
+        super(pProperties, SlotType.HEAD, CollectionType.FIRE);
     }
 
     @Override
@@ -29,8 +30,8 @@ public class SpaulderOfProtection extends AccessoryItem {
         Rarity rarity = stack.get(ModDataComponents.ACCESSORY_RARITY);
         int level = stack.get(ModDataComponents.ACCESSORY_LEVEL);
         if (rarity == null) rarity = Rarity.COMMON;
-        double bonus = (1.0 + (level * 0.1)) * rarity.getMultiplier();
-        return ItemAttributeModifiers.builder().add(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(ARMOR_TOUGHNESS_ID, bonus, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.ANY).build();
+        double bonus = (0.1 + (level * 0.01)) * rarity.getMultiplier();
+        return ItemAttributeModifiers.builder().add(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(KB_RESISTANCE_ID, bonus, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.ANY).build();
     }
 
     @Override
@@ -40,7 +41,7 @@ public class SpaulderOfProtection extends AccessoryItem {
         Rarity rarity = pStack.get(ModDataComponents.ACCESSORY_RARITY);
         int level = pStack.get(ModDataComponents.ACCESSORY_LEVEL);
         if (rarity == null) rarity = Rarity.COMMON;
-        double bonus = (1.0 + (level * 0.1)) * rarity.getMultiplier();
-        pTooltipComponents.add(Component.translatable("tooltip.onlylaststand.buff.armor_toughness", String.format("+%.1f", bonus)));
+        double bonus = (0.1 + (level * 0.01)) * rarity.getMultiplier();
+        pTooltipComponents.add(Component.translatable("tooltip.onlylaststand.buff.kb_resistance", String.format("%.0f%%", bonus * 100)));
     }
 }

@@ -1,4 +1,5 @@
-package msu.msuteam.onlylaststand.item.accessories.rings;
+package msu.msuteam.onlylaststand.item.accessories.fire_collection;
+import msu.msuteam.onlylaststand.util.CollectionType;
 import net.minecraft.network.chat.Component;
 import java.util.List;
 import net.minecraft.world.item.Item;
@@ -8,24 +9,19 @@ import msu.msuteam.onlylaststand.component.ModDataComponents;
 import msu.msuteam.onlylaststand.item.accessories.AccessoryItem;
 import msu.msuteam.onlylaststand.util.Rarity;
 import msu.msuteam.onlylaststand.util.SlotType;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
-
-import java.util.List;
 
 public class SpeedRingItem extends AccessoryItem {
 
     private static final ResourceLocation SPEED_MODIFIER_ID = ResourceLocation.fromNamespaceAndPath(OnlyLastStand.MODID, "speed_ring_bonus");
 
     public SpeedRingItem(Properties pProperties) {
-        super(pProperties, SlotType.SIGNET);
+        super(pProperties, SlotType.SIGNET, CollectionType.FIRE);
     }
 
     // ИСПРАВЛЕНО: Теперь мы переопределяем наш кастомный метод

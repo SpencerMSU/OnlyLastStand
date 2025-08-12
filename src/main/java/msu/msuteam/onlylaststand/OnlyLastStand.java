@@ -13,7 +13,6 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
-import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import org.slf4j.Logger;
@@ -29,39 +28,42 @@ public class OnlyLastStand {
             .title(Component.translatable("itemGroup.onlylaststand"))
             .icon(() -> ModItems.SYNERGY_STONE.get().getDefaultInstance())
             .displayItems((parameters, output) -> {
-                // --- Добавляем только нужные предметы ---
-
                 // Материалы
                 output.accept(ModItems.UPGRADE_SHARD.get());
                 output.accept(ModItems.UPGRADE_STONE.get());
                 output.accept(ModItems.SYNERGY_STONE.get());
 
-                // Уникальные аксессуары
-                output.accept(ModItems.SPEED_RING.get());
-                output.accept(ModItems.CROWN_OF_RESILIENCE.get());
-                output.accept(ModItems.AMULET_OF_VITALITY.get());
-                output.accept(ModItems.PAULDRON_OF_FORTITUDE.get());
-                output.accept(ModItems.SPAULDER_OF_PROTECTION.get());
-                output.accept(ModItems.GAUNTLETS_OF_ALACRITY.get());
-                output.accept(ModItems.BAND_OF_REACH.get());
-                output.accept(ModItems.SPEED_RING.get());
-                output.accept(ModItems.VAMBRACE_OF_STRENGTH.get());
-                output.accept(ModItems.GREAVES_OF_SAFETY.get());
+                // Огненная коллекция
+                output.accept(ModItems.FIRE_CROWN.get());
+                output.accept(ModItems.FIRE_AMULET.get());
+                output.accept(ModItems.FIRE_PAULDRON.get());
+                output.accept(ModItems.FIRE_SPAULDER.get());
+                output.accept(ModItems.FIRE_GAUNTLETS.get());
+                output.accept(ModItems.FIRE_BAND.get());
+                output.accept(ModItems.FIRE_RING.get());
+                output.accept(ModItems.FIRE_VAMBRACE.get());
+                output.accept(ModItems.FIRE_GREAVES.get());
+
+                // Водная коллекция
+                output.accept(ModItems.WATER_CROWN.get());
+                output.accept(ModItems.WATER_AMULET.get());
+                output.accept(ModItems.WATER_PAULDRON.get());
+                output.accept(ModItems.WATER_SPAULDER.get());
+                output.accept(ModItems.WATER_GAUNTLETS.get());
+                output.accept(ModItems.WATER_BAND.get());
+                output.accept(ModItems.WATER_SIGNET.get());
+                output.accept(ModItems.WATER_VAMBRACE.get());
+                output.accept(ModItems.WATER_GREAVES.get());
 
             }).build());
 
     public OnlyLastStand(IEventBus modEventBus, ModContainer modContainer) {
-        // --- РЕГИСТРАЦИЯ ВСЕХ КОМПОНЕНТОВ МОДА ---
         ModItems.ITEMS.register(modEventBus);
         CREATIVE_MODE_TABS.register(modEventBus);
         ModDataComponents.COMPONENT_TYPES.register(modEventBus);
         ModAttachments.ATTACHMENT_TYPES.register(modEventBus);
         ModMenuTypes.MENUS.register(modEventBus);
         ModLootModifiers.LOOT_MODIFIER_SERIALIZERS.register(modEventBus);
-
-        // Регистрируем обработчик сетевых пакетов
         modEventBus.addListener(PacketHandler::register);
-
-        // NeoForge.EVENT_BUS.register(this); // ИСПРАВЛЕНО: Эта строка УДАЛЕНА
     }
 }

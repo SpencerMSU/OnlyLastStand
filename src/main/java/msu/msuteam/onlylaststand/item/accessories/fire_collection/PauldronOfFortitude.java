@@ -1,8 +1,9 @@
-package msu.msuteam.onlylaststand.item.accessories.head;
+package msu.msuteam.onlylaststand.item.accessories.fire_collection;
 
 import msu.msuteam.onlylaststand.OnlyLastStand;
 import msu.msuteam.onlylaststand.component.ModDataComponents;
 import msu.msuteam.onlylaststand.item.accessories.AccessoryItem;
+import msu.msuteam.onlylaststand.util.CollectionType;
 import msu.msuteam.onlylaststand.util.Rarity;
 import msu.msuteam.onlylaststand.util.SlotType;
 import net.minecraft.network.chat.Component;
@@ -17,11 +18,11 @@ import net.minecraft.world.item.component.ItemAttributeModifiers;
 
 import java.util.List;
 
-public class CrownOfResilience extends AccessoryItem {
-    private static final ResourceLocation KB_RESISTANCE_ID = ResourceLocation.fromNamespaceAndPath(OnlyLastStand.MODID, "crown_kb_resistance");
+public class PauldronOfFortitude extends AccessoryItem {
+    private static final ResourceLocation ARMOR_ID = ResourceLocation.fromNamespaceAndPath(OnlyLastStand.MODID, "pauldron_armor");
 
-    public CrownOfResilience(Properties pProperties) {
-        super(pProperties, SlotType.HEAD);
+    public PauldronOfFortitude(Properties pProperties) {
+        super(pProperties, SlotType.RIGHT_SHOULDER, CollectionType.FIRE);
     }
 
     @Override
@@ -29,8 +30,8 @@ public class CrownOfResilience extends AccessoryItem {
         Rarity rarity = stack.get(ModDataComponents.ACCESSORY_RARITY);
         int level = stack.get(ModDataComponents.ACCESSORY_LEVEL);
         if (rarity == null) rarity = Rarity.COMMON;
-        double bonus = (0.1 + (level * 0.01)) * rarity.getMultiplier();
-        return ItemAttributeModifiers.builder().add(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(KB_RESISTANCE_ID, bonus, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.ANY).build();
+        double bonus = (2.0 + (level * 0.25)) * rarity.getMultiplier();
+        return ItemAttributeModifiers.builder().add(Attributes.ARMOR, new AttributeModifier(ARMOR_ID, bonus, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.ANY).build();
     }
 
     @Override
@@ -40,7 +41,7 @@ public class CrownOfResilience extends AccessoryItem {
         Rarity rarity = pStack.get(ModDataComponents.ACCESSORY_RARITY);
         int level = pStack.get(ModDataComponents.ACCESSORY_LEVEL);
         if (rarity == null) rarity = Rarity.COMMON;
-        double bonus = (0.1 + (level * 0.01)) * rarity.getMultiplier();
-        pTooltipComponents.add(Component.translatable("tooltip.onlylaststand.buff.kb_resistance", String.format("%.0f%%", bonus * 100)));
+        double bonus = (2.0 + (level * 0.25)) * rarity.getMultiplier();
+        pTooltipComponents.add(Component.translatable("tooltip.onlylaststand.buff.armor", String.format("+%.2f", bonus)));
     }
 }

@@ -1,16 +1,8 @@
 package msu.msuteam.onlylaststand.core;
 
 import msu.msuteam.onlylaststand.OnlyLastStand;
-import msu.msuteam.onlylaststand.item.accessories.AccessoryItem;
-import msu.msuteam.onlylaststand.item.accessories.elbow.VambraceOfStrength;
-import msu.msuteam.onlylaststand.item.accessories.gloves.GauntletsOfAlacrity;
-import msu.msuteam.onlylaststand.item.accessories.head.CrownOfResilience;
-import msu.msuteam.onlylaststand.item.accessories.knee.GreavesOfSafety;
-import msu.msuteam.onlylaststand.item.accessories.neck.AmuletOfVitality;
-import msu.msuteam.onlylaststand.item.accessories.rings.BandOfReach;
-import msu.msuteam.onlylaststand.item.accessories.rings.SpeedRingItem;
-import msu.msuteam.onlylaststand.item.accessories.shoulder.PauldronOfFortitude;
-import msu.msuteam.onlylaststand.item.accessories.shoulder.SpaulderOfProtection;
+import msu.msuteam.onlylaststand.item.accessories.fire_collection.*;
+import msu.msuteam.onlylaststand.item.accessories.water_collection.*; // Импорт водной коллекции
 import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -23,14 +15,25 @@ public class ModItems {
     public static final DeferredItem<Item> UPGRADE_STONE = ITEMS.registerSimpleItem("upgrade_stone", new Item.Properties().stacksTo(16));
     public static final DeferredItem<Item> SYNERGY_STONE = ITEMS.registerSimpleItem("synergy_stone", new Item.Properties().stacksTo(16));
 
-    // Аксессуары
-    public static final DeferredItem<Item> CROWN_OF_RESILIENCE = ITEMS.register("crown_of_resilience", () -> new CrownOfResilience(new Item.Properties().stacksTo(1)));
-    public static final DeferredItem<Item> AMULET_OF_VITALITY = ITEMS.register("amulet_of_vitality", () -> new AmuletOfVitality(new Item.Properties().stacksTo(1)));
-    public static final DeferredItem<Item> PAULDRON_OF_FORTITUDE = ITEMS.register("pauldron_of_fortitude", () -> new PauldronOfFortitude(new Item.Properties().stacksTo(1)));
-    public static final DeferredItem<Item> SPAULDER_OF_PROTECTION = ITEMS.register("spaulder_of_protection", () -> new SpaulderOfProtection(new Item.Properties().stacksTo(1)));
-    public static final DeferredItem<Item> GAUNTLETS_OF_ALACRITY = ITEMS.register("gauntlets_of_alacrity", () -> new GauntletsOfAlacrity(new Item.Properties().stacksTo(1)));
-    public static final DeferredItem<Item> BAND_OF_REACH = ITEMS.register("band_of_reach", () -> new BandOfReach(new Item.Properties().stacksTo(1)));
-    public static final DeferredItem<Item> SPEED_RING = ITEMS.register("speed_ring", () -> new SpeedRingItem(new Item.Properties().stacksTo(1)));
-    public static final DeferredItem<Item> VAMBRACE_OF_STRENGTH = ITEMS.register("vambrace_of_strength", () -> new VambraceOfStrength(new Item.Properties().stacksTo(1)));
-    public static final DeferredItem<Item> GREAVES_OF_SAFETY = ITEMS.register("greaves_of_safety", () -> new GreavesOfSafety(new Item.Properties().stacksTo(1)));
+    // Огненная коллекция
+    public static final DeferredItem<Item> FIRE_CROWN = ITEMS.register("fire_crown", () -> new CrownOfResilience(new Item.Properties().stacksTo(1)));
+    public static final DeferredItem<Item> FIRE_AMULET = ITEMS.register("fire_amulet", () -> new AmuletOfVitality(new Item.Properties().stacksTo(1)));
+    public static final DeferredItem<Item> FIRE_PAULDRON = ITEMS.register("fire_pauldron", () -> new PauldronOfFortitude(new Item.Properties().stacksTo(1)));
+    public static final DeferredItem<Item> FIRE_SPAULDER = ITEMS.register("fire_spaulder", () -> new SpaulderOfProtection(new Item.Properties().stacksTo(1)));
+    public static final DeferredItem<Item> FIRE_GAUNTLETS = ITEMS.register("fire_gauntlets", () -> new GauntletsOfAlacrity(new Item.Properties().stacksTo(1)));
+    public static final DeferredItem<Item> FIRE_BAND = ITEMS.register("fire_band", () -> new BandOfReach(new Item.Properties().stacksTo(1)));
+    public static final DeferredItem<Item> FIRE_RING = ITEMS.register("fire_ring", () -> new SpeedRingItem(new Item.Properties().stacksTo(1)));
+    public static final DeferredItem<Item> FIRE_VAMBRACE = ITEMS.register("fire_vambrace", () -> new VambraceOfStrength(new Item.Properties().stacksTo(1)));
+    public static final DeferredItem<Item> FIRE_GREAVES = ITEMS.register("fire_greaves", () -> new GreavesOfSafety(new Item.Properties().stacksTo(1)));
+
+    // Водная коллекция
+    public static final DeferredItem<Item> WATER_CROWN = ITEMS.register("water_crown", () -> new TidalCrown(new Item.Properties().stacksTo(1)));
+    public static final DeferredItem<Item> WATER_AMULET = ITEMS.register("water_amulet", () -> new AmuletOfTheAbyss(new Item.Properties().stacksTo(1)));
+    public static final DeferredItem<Item> WATER_PAULDRON = ITEMS.register("water_pauldron", () -> new CoralPauldron(new Item.Properties().stacksTo(1)));
+    public static final DeferredItem<Item> WATER_SPAULDER = ITEMS.register("water_spaulder", () -> new KelpSpaulder(new Item.Properties().stacksTo(1)));
+    public static final DeferredItem<Item> WATER_GAUNTLETS = ITEMS.register("water_gauntlets", () -> new HarpoonersGrips(new Item.Properties().stacksTo(1)));
+    public static final DeferredItem<Item> WATER_BAND = ITEMS.register("water_band", () -> new RingOfTides(new Item.Properties().stacksTo(1)));
+    public static final DeferredItem<Item> WATER_SIGNET = ITEMS.register("water_signet", () -> new PearlSignet(new Item.Properties().stacksTo(1)));
+    public static final DeferredItem<Item> WATER_VAMBRACE = ITEMS.register("water_vambrace", () -> new FinBracers(new Item.Properties().stacksTo(1)));
+    public static final DeferredItem<Item> WATER_GREAVES = ITEMS.register("water_greaves", () -> new AquaStriders(new Item.Properties().stacksTo(1)));
 }

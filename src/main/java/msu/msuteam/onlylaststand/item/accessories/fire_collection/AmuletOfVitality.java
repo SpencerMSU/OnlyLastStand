@@ -1,8 +1,9 @@
-package msu.msuteam.onlylaststand.item.accessories.neck;
+package msu.msuteam.onlylaststand.item.accessories.fire_collection;
 
 import msu.msuteam.onlylaststand.OnlyLastStand;
 import msu.msuteam.onlylaststand.component.ModDataComponents;
 import msu.msuteam.onlylaststand.item.accessories.AccessoryItem;
+import msu.msuteam.onlylaststand.util.CollectionType;
 import msu.msuteam.onlylaststand.util.Rarity;
 import msu.msuteam.onlylaststand.util.SlotType;
 import net.minecraft.network.chat.Component;
@@ -21,7 +22,7 @@ public class AmuletOfVitality extends AccessoryItem {
     private static final ResourceLocation HEALTH_ID = ResourceLocation.fromNamespaceAndPath(OnlyLastStand.MODID, "amulet_health");
 
     public AmuletOfVitality(Properties pProperties) {
-        super(pProperties, SlotType.NECK);
+        super(pProperties, SlotType.NECK, CollectionType.FIRE);
     }
 
     @Override
