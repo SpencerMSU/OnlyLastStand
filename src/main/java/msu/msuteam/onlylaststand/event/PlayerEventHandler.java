@@ -23,7 +23,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.NeoForgeMod;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
-import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent; // ИСПРАВЛЕНО: ПРАВИЛЬНЫЙ ИМПОРТ
+import net.neoforged.neoforge.event.entity.living.LivingHurtEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 
 import java.util.HashMap;
@@ -37,6 +37,7 @@ public class PlayerEventHandler {
     private static final ResourceLocation FIRE_SET_NETHER_BONUS_ID = ResourceLocation.fromNamespaceAndPath(OnlyLastStand.MODID, "fire_set_nether_bonus");
     private static final ResourceLocation WATER_SET_SWIM_SPEED_ID = ResourceLocation.fromNamespaceAndPath(OnlyLastStand.MODID, "water_set_swim_speed");
 
+    // Вызывается при входе в мир, респавне и смене измерения
     @SubscribeEvent
     public static void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
         updateAllPlayerModifiers(event.getEntity());
@@ -61,14 +62,17 @@ public class PlayerEventHandler {
         }
     }
 
+    // Главный метод, который вызывается, когда нужно обновить все баффы
     public static void updateAllPlayerModifiers(Player player) {
         if (player.level().isClientSide) return;
 
+        // --- Удаляем старые атрибуты ---
         Multimap<Holder<Attribute>, AttributeModifier> lastMods = lastAppliedModifiers.get(player.getUUID());
         if (lastMods != null && !lastMods.isEmpty()) {
             player.getAttributes().removeAttributeModifiers(lastMods);
         }
 
+        // --- Собираем новые атрибуты ---
         Multimap<Holder<Attribute>, AttributeModifier> currentMods = HashMultimap.create();
         AccessoryInventory inventory = player.getData(ModAttachments.ACCESSORY_INVENTORY);
         if (inventory == null) return;
@@ -83,6 +87,7 @@ public class PlayerEventHandler {
             }
         }
 
+        // --- Добавляем сетовые бонусы атрибутов ---
         if (isWearingFullSet(player, CollectionType.FIRE) && player.level().dimension().equals(Level.NETHER)) {
             AttributeModifier netherBonus = new AttributeModifier(
                     FIRE_SET_NETHER_BONUS_ID, 0.15, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL
@@ -95,37 +100,44 @@ public class PlayerEventHandler {
             currentMods.put(NeoForgeMod.SWIM_SPEED, swimSpeedBonus);
         }
 
+        // --- Применяем новые атрибуты ---
         if (!currentMods.isEmpty()) {
             player.getAttributes().addTransientAttributeModifiers(currentMods);
         }
 
+        // --- Применяем эффекты зелий ---
         handlePotionEffects(player);
+
+        // --- Сохраняем состояние ---
         lastAppliedModifiers.put(player.getUUID(), currentMods);
     }
 
     private static void handlePotionEffects(Player player) {
+        // Сначала удаляем эффекты, чтобы они не накапливались, если сет снят
         player.removeEffect(MobEffects.FIRE_RESISTANCE);
+        player.removeEffect(MobEffects.WATER_BREATHING);
 
         if (isWearingFullSet(player, CollectionType.FIRE)) {
+            // Даем бесконечный эффект Огнестойкости
             player.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, -1, 0, false, false, true));
         } else if (isWearingFullSet(player, CollectionType.WATER)) {
-            if (player.getAirSupply() < player.getMaxAirSupply()) {
-                player.setAirSupply(player.getMaxAirSupply());
-            }
+            // ИСПРАВЛЕНО: Даем бесконечный эффект "Подводное дыхание"
+            player.addEffect(new MobEffectInstance(MobEffects.WATER_BREATHING, -1, 0, false, false, true));
         }
     }
 
     // Обработчик урона
     @SubscribeEvent
-    public static void onLivingIncomingDamage(LivingIncomingDamageEvent event) { // ИСПРАВЛЕНО: ПРАВИЛЬНОЕ СОБЫТИЕ
+    public static void onLivingHurt(LivingHurtEvent event) {
+        // Огненный сет
         if (event.getEntity() instanceof Player player && isWearingFullSet(player, CollectionType.FIRE)) {
-            // ИСПРАВЛЕНО: Правильные методы для этого события
             if (event.getSource().is(DamageTypes.IN_FIRE) || event.getSource().is(DamageTypes.ON_FIRE) || event.getSource().is(DamageTypes.LAVA)) {
                 event.setCanceled(true);
                 player.clearFire();
             }
         }
 
+        // Водный сет
         if (event.getSource().getEntity() instanceof Player player && event.getEntity() instanceof LivingEntity target && isWearingFullSet(player, CollectionType.WATER)) {
             if (player.isInWaterOrRain() && target.isInWaterOrRain()) {
                 event.setAmount(event.getAmount() * 1.5f);
@@ -133,6 +145,7 @@ public class PlayerEventHandler {
         }
     }
 
+    // Вспомогательный метод для проверки сета
     public static boolean isWearingFullSet(Player player, CollectionType collection) {
         AccessoryInventory inventory = player.getData(ModAttachments.ACCESSORY_INVENTORY);
         if (inventory == null) return false;
