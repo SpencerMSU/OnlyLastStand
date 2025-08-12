@@ -38,5 +38,13 @@
   "item.onlylaststand.gauntlets_of_alacrity": "Gauntlets of Alacrity",
   "item.onlylaststand.band_of_reach": "Band of Reach",
   "item.onlylaststand.vambrace_of_strength": "Vambrace of Strength",
-  "item.onlylaststand.greaves_of_safety": "Greaves of Safety"
+  "item.onlylaststand.greaves_of_safety": "Greaves of Safety",
+  "tooltip.onlylaststand.buff.kb_resistance": "§9+%s Knockback Resistance",
+  "tooltip.onlylaststand.buff.health": "§c+%s Max Health",
+  "tooltip.onlylaststand.buff.armor": "§a+%s Armor",
+  "tooltip.onlylaststand.buff.armor_toughness": "§a+%s Armor Toughness",
+  "tooltip.onlylaststand.buff.attack_speed": "§e+%s Attack Speed",
+  "tooltip.onlylaststand.buff.reach": "§b+%s Interaction Range",
+  "tooltip.onlylaststand.buff.damage": "§c+%s Attack Damage",
+  "tooltip.onlylaststand.buff.safe_fall": "§9+%s Safe Fall Distance"
 }

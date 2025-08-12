@@ -34,6 +34,7 @@ public class AttributeManager {
         AccessoryInventory inventory = player.getData(ModAttachments.ACCESSORY_INVENTORY);
         if (inventory == null) return;
 
+        // --- Шаг 1: Удаляем ВСЕ старые модификаторы от аксессуаров ---
         player.getAttributes().getSyncableAttributes().forEach(attributeInstance -> {
             new ArrayList<>(attributeInstance.getModifiers()).forEach(modifier -> {
                 if (modifier.id().getNamespace().equals(OnlyLastStand.MODID)) {
@@ -42,20 +43,23 @@ public class AttributeManager {
             });
         });
 
+        // --- Шаг 2: Применяем новые модификаторы для каждого слота индивидуально ---
         for (int i = 0; i < inventory.getSlots(); i++) {
             ItemStack stack = inventory.getStackInSlot(i);
             if (stack.getItem() instanceof AccessoryItem accessory) {
-                // ИСПРАВЛЕНО: Вызываем наш новый кастомный метод
                 ItemAttributeModifiers itemModifiers = accessory.getAccessoryAttributeModifiers(stack);
 
-                final int slotIndex = i; // ИСПРАВЛЕНО: Создаем final-переменную для лямбды
+                final int slotIndex = i;
                 itemModifiers.modifiers().forEach(entry -> {
                     Holder<Attribute> attributeHolder = entry.attribute();
                     AttributeModifier modifier = entry.modifier();
                     AttributeInstance instance = player.getAttribute(attributeHolder);
 
                     if (instance != null) {
+                        // ИСПРАВЛЕНО: Создаем уникальный ID для каждого слота
                         ResourceLocation uniqueModifierId = modifier.id().withPath(p -> p + "_slot_" + slotIndex);
+
+                        // ИСПРАВЛЕНО: Используем правильный конструктор с 3 аргументами
                         AttributeModifier newModifier = new AttributeModifier(
                                 uniqueModifierId,
                                 modifier.amount(),

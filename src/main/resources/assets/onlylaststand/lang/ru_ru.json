@@ -38,5 +38,13 @@
   "item.onlylaststand.gauntlets_of_alacrity": "Латные перчатки проворства",
   "item.onlylaststand.band_of_reach": "Кольцо досягаемости",
   "item.onlylaststand.vambrace_of_strength": "Наруч силы",
-  "item.onlylaststand.greaves_of_safety": "Наголенники безопасности"
+  "item.onlylaststand.greaves_of_safety": "Наголенники безопасности",
+  "tooltip.onlylaststand.buff.kb_resistance": "§9+%s к сопротивлению отбрасыванию",
+  "tooltip.onlylaststand.buff.health": "§c+%s к макс. здоровью",
+  "tooltip.onlylaststand.buff.armor": "§a+%s к броне",
+  "tooltip.onlylaststand.buff.armor_toughness": "§a+%s к прочности брони",
+  "tooltip.onlylaststand.buff.attack_speed": "§e+%s к скорости атаки",
+  "tooltip.onlylaststand.buff.reach": "§b+%s к дальности взаимодействия",
+  "tooltip.onlylaststand.buff.damage": "§c+%s к урону",
+  "tooltip.onlylaststand.buff.safe_fall": "§9+%s к безопасной высоте падения"
 }

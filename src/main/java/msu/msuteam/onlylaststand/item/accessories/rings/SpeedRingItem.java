@@ -1,5 +1,8 @@
 package msu.msuteam.onlylaststand.item.accessories.rings;
-
+import net.minecraft.network.chat.Component;
+import java.util.List;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.TooltipFlag;
 import msu.msuteam.onlylaststand.OnlyLastStand;
 import msu.msuteam.onlylaststand.component.ModDataComponents;
 import msu.msuteam.onlylaststand.item.accessories.AccessoryItem;
