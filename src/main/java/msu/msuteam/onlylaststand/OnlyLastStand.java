@@ -1,5 +1,5 @@
 package msu.msuteam.onlylaststand;
-
+import msu.msuteam.onlylaststand.magic.ModEffects;
 import com.mojang.logging.LogUtils;
 import msu.msuteam.onlylaststand.component.ModDataComponents;
 import msu.msuteam.onlylaststand.core.ModItems;
@@ -28,12 +28,10 @@ public class OnlyLastStand {
             .title(Component.translatable("itemGroup.onlylaststand"))
             .icon(() -> ModItems.SYNERGY_STONE.get().getDefaultInstance())
             .displayItems((parameters, output) -> {
-                // Материалы
+
                 output.accept(ModItems.UPGRADE_SHARD.get());
                 output.accept(ModItems.UPGRADE_STONE.get());
                 output.accept(ModItems.SYNERGY_STONE.get());
-
-                // Огненная коллекция
                 output.accept(ModItems.FIRE_CROWN.get());
                 output.accept(ModItems.FIRE_AMULET.get());
                 output.accept(ModItems.FIRE_PAULDRON.get());
@@ -43,8 +41,6 @@ public class OnlyLastStand {
                 output.accept(ModItems.FIRE_RING.get());
                 output.accept(ModItems.FIRE_VAMBRACE.get());
                 output.accept(ModItems.FIRE_GREAVES.get());
-
-                // Водная коллекция
                 output.accept(ModItems.WATER_CROWN.get());
                 output.accept(ModItems.WATER_AMULET.get());
                 output.accept(ModItems.WATER_PAULDRON.get());
@@ -65,5 +61,6 @@ public class OnlyLastStand {
         ModMenuTypes.MENUS.register(modEventBus);
         ModLootModifiers.LOOT_MODIFIER_SERIALIZERS.register(modEventBus);
         modEventBus.addListener(PacketHandler::register);
+        ModEffects.register(modEventBus);
     }
 }

@@ -7,7 +7,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.FormattedText;
 import net.minecraft.world.entity.player.Inventory;
 
 import java.util.ArrayList;
@@ -21,14 +20,12 @@ public class AccessoryScreen extends AbstractContainerScreen<AccessoryMenu> {
         super(pMenu, pPlayerInventory, pTitle);
         this.imageWidth = 176;
         this.imageHeight = 168;
-        this.titleLabelY = -1000; // Прячем стандартный заголовок
+        this.titleLabelY = -1000;
     }
 
     @Override
     protected void init() {
         super.init();
-        // ИСПРАВЛЕНИЕ: Переопределяем leftPos, чтобы центрировать всю конструкцию, включая боковую панель.
-        // Это не даст элементам "съехать".
         int totalWidth = this.imageWidth + this.bonusPanelWidth;
         this.leftPos = (this.width - totalWidth) / 2;
     }
@@ -41,29 +38,68 @@ public class AccessoryScreen extends AbstractContainerScreen<AccessoryMenu> {
         int topColor = 0xFF353535;
         int bottomColor = 0xFF4F4F4F;
 
-        // Отрисовка основной панели
+        // Фон основной панели
         pGuiGraphics.fillGradient(x, y, x + this.imageWidth, y + this.imageHeight, topColor, bottomColor);
 
-        // Отрисовка панели бонусов справа
+        // Фон панели бонусов
         int bonusPanelX = x + this.imageWidth;
         pGuiGraphics.fillGradient(bonusPanelX, y, bonusPanelX + this.bonusPanelWidth, y + this.imageHeight, topColor, bottomColor);
 
-        // Отрисовка "углубления" под слоты аксессуаров для их выделения
-        int slotGridX = x + 61 - 4;
-        int slotGridY = y + 18 - 4;
-        int slotGridWidth = 18 * 3 + 8;
-        int slotGridHeight = 18 * 3 + 8;
-        pGuiGraphics.fill(slotGridX, slotGridY, slotGridX + slotGridWidth, slotGridY + slotGridHeight, 0xFF202020);
+        int borderColor = 0xFF000000; // Черный цвет для границ
 
-        // ДОБАВЛЕНО: Линия-разделитель между аксессуарами и инвентарем
+        // --- ДОБАВЛЕНО: Рамки для слотов аксессуаров ---
+        int accessorySlotsX = x + 61;
+        int accessorySlotsY = y + 18;
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                int slotX = accessorySlotsX + j * 18;
+                int slotY = accessorySlotsY + i * 18;
+                pGuiGraphics.drawManaged(() -> {
+                    pGuiGraphics.hLine(slotX - 1, slotX + 17, slotY - 1, borderColor);
+                    pGuiGraphics.hLine(slotX - 1, slotX + 17, slotY + 17, borderColor);
+                    pGuiGraphics.vLine(slotX - 1, slotY - 1, slotY + 17, borderColor);
+                    pGuiGraphics.vLine(slotX + 17, slotY - 1, slotY + 17, borderColor);
+                });
+            }
+        }
+
+        // Линия-разделитель
         int separatorY = y + 78;
         int separatorColor = 0xFF202020;
         pGuiGraphics.fill(x + 4, separatorY, x + this.imageWidth - 4, separatorY + 1, separatorColor);
+
+        // --- ДОБАВЛЕНО: Рамки для инвентаря игрока ---
+        int playerInvX = x + 8;
+        int playerInvY = y + 86;
+        for (int i = 0; i < 3; ++i) {
+            for (int j = 0; j < 9; ++j) {
+                int slotX = playerInvX + j * 18;
+                int slotY = playerInvY + i * 18;
+                pGuiGraphics.drawManaged(() -> {
+                    pGuiGraphics.hLine(slotX - 1, slotX + 17, slotY - 1, borderColor);
+                    pGuiGraphics.hLine(slotX - 1, slotX + 17, slotY + 17, borderColor);
+                    pGuiGraphics.vLine(slotX - 1, slotY - 1, slotY + 17, borderColor);
+                    pGuiGraphics.vLine(slotX + 17, slotY - 1, slotY + 17, borderColor);
+                });
+            }
+        }
+
+        // --- ДОБАВЛЕНО: Рамки для хотбара ---
+        int hotbarY = y + 144; // 86 + 58
+        for (int i = 0; i < 9; ++i) {
+            int slotX = playerInvX + i * 18;
+            int slotY = hotbarY;
+            pGuiGraphics.drawManaged(() -> {
+                pGuiGraphics.hLine(slotX - 1, slotX + 17, slotY - 1, borderColor);
+                pGuiGraphics.hLine(slotX - 1, slotX + 17, slotY + 17, borderColor);
+                pGuiGraphics.vLine(slotX - 1, slotY - 1, slotY + 17, borderColor);
+                pGuiGraphics.vLine(slotX + 17, slotY - 1, slotY + 17, borderColor);
+            });
+        }
     }
 
     @Override
     public void render(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
-        // Сначала вызываем super.render(), который отрисует слоты в правильном, вычисленном нами месте
         super.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
         this.renderTooltip(pGuiGraphics, pMouseX, pMouseY);
         renderSetBonusInfo(pGuiGraphics);
@@ -72,7 +108,6 @@ public class AccessoryScreen extends AbstractContainerScreen<AccessoryMenu> {
     private void renderSetBonusInfo(GuiGraphics graphics) {
         if (this.minecraft == null || this.minecraft.player == null) return;
 
-        // Используем this.leftPos и this.topPos, которые теперь всегда корректны
         int x = this.leftPos;
         int y = this.topPos;
 

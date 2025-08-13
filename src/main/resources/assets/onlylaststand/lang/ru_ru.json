@@ -71,5 +71,8 @@
   "setbonus.onlylaststand.water2": "§7- +15% к скорости плавания",
   "setbonus.onlylaststand.water3": "§7- +50% урона целям в воде",
   "tooltip.onlylaststand.buff.attack_knockback": "§3+%s к отбрасыванию",
-  "tooltip.onlylaststand.buff.dig_speed": "§e+%s к скорости копания"
+  "tooltip.onlylaststand.buff.dig_speed": "§e+%s к скорости копания",
+  "effect.onlylaststand.mana_regeneration": "Усиленная регенерация маны",
+  "container.onlylaststand.spells": "Заклинания",
+  "key.onlylaststand.open_spell_inventory": "Открыть инвентарь заклинаний"
 }

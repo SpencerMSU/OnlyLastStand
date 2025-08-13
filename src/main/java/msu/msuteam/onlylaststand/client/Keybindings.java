@@ -15,7 +15,18 @@ public class Keybindings {
             "key.category.onlylaststand"
     );
 
+    // --- ДОБАВЬТЕ ЭТОТ КОД ---
+    public static final KeyMapping OPEN_SPELL_KEY = new KeyMapping(
+            "key.onlylaststand.open_spell_inventory",
+            KeyConflictContext.IN_GAME,
+            InputConstants.Type.KEYSYM,
+            GLFW.GLFW_KEY_I,
+            "key.category.onlylaststand"
+    );
+    // -------------------------
+
     public static void register(RegisterKeyMappingsEvent event) {
         event.register(OPEN_ACCESSORY_KEY);
+        event.register(OPEN_SPELL_KEY); // <-- ДОБАВЬТЕ ЭТУ СТРОКУ
     }
 }
