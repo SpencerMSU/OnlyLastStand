@@ -2,7 +2,7 @@ package msu.msuteam.onlylaststand.core;
 
 import msu.msuteam.onlylaststand.OnlyLastStand;
 import msu.msuteam.onlylaststand.item.accessories.fire_collection.*;
-import msu.msuteam.onlylaststand.item.accessories.water_collection.*; // Импорт водной коллекции
+import msu.msuteam.onlylaststand.item.accessories.water_collection.*;
 import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -10,12 +10,10 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 public class ModItems {
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(OnlyLastStand.MODID);
 
-    // Материалы
     public static final DeferredItem<Item> UPGRADE_SHARD = ITEMS.registerSimpleItem("upgrade_shard", new Item.Properties().stacksTo(64));
     public static final DeferredItem<Item> UPGRADE_STONE = ITEMS.registerSimpleItem("upgrade_stone", new Item.Properties().stacksTo(16));
     public static final DeferredItem<Item> SYNERGY_STONE = ITEMS.registerSimpleItem("synergy_stone", new Item.Properties().stacksTo(16));
 
-    // Огненная коллекция
     public static final DeferredItem<Item> FIRE_CROWN = ITEMS.register("fire_crown", () -> new CrownOfResilience(new Item.Properties().stacksTo(1)));
     public static final DeferredItem<Item> FIRE_AMULET = ITEMS.register("fire_amulet", () -> new AmuletOfVitality(new Item.Properties().stacksTo(1)));
     public static final DeferredItem<Item> FIRE_PAULDRON = ITEMS.register("fire_pauldron", () -> new PauldronOfFortitude(new Item.Properties().stacksTo(1)));
@@ -26,7 +24,6 @@ public class ModItems {
     public static final DeferredItem<Item> FIRE_VAMBRACE = ITEMS.register("fire_vambrace", () -> new VambraceOfStrength(new Item.Properties().stacksTo(1)));
     public static final DeferredItem<Item> FIRE_GREAVES = ITEMS.register("fire_greaves", () -> new GreavesOfSafety(new Item.Properties().stacksTo(1)));
 
-    // Водная коллекция
     public static final DeferredItem<Item> WATER_CROWN = ITEMS.register("water_crown", () -> new TidalCrown(new Item.Properties().stacksTo(1)));
     public static final DeferredItem<Item> WATER_AMULET = ITEMS.register("water_amulet", () -> new AmuletOfTheAbyss(new Item.Properties().stacksTo(1)));
     public static final DeferredItem<Item> WATER_PAULDRON = ITEMS.register("water_pauldron", () -> new CoralPauldron(new Item.Properties().stacksTo(1)));

@@ -3,9 +3,9 @@ package msu.msuteam.onlylaststand.util;
 import net.minecraft.network.chat.Component;
 
 public enum CollectionType {
-    NONE("Нет", 0), // Для предметов без коллекции
-    FIRE("Огненная", 70),   // 70% шанс выпадения, если коллекция выбрана
-    WATER("Водная", 30);    // 30% шанс
+    NONE("Нет", 0),
+    FIRE("Огненная", 70),
+    WATER("Водная", 30);
 
     private final String name;
     private final int weight;

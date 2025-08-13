@@ -21,7 +21,6 @@ public class ManaEvents {
 
             float regenAmount = PlayerMana.DEFAULT_MANA_REGEN;
 
-            // ИСПРАВЛЕНО: Теперь этот вызов корректен, так как MANA_REGENERATION имеет тип Holder
             if (player.hasEffect(ModEffects.MANA_REGENERATION)) {
                 regenAmount += PlayerMana.DEFAULT_MANA_REGEN;
             }
@@ -34,7 +33,6 @@ public class ManaEvents {
     public static void onFoodEaten(LivingEntityUseItemEvent.Finish event) {
         if (event.getEntity() instanceof Player player) {
             if (event.getItem().is(Items.GOLDEN_APPLE) || event.getItem().is(Items.ENCHANTED_GOLDEN_APPLE)) {
-                // ИСПРАВЛЕНО: И этот вызов теперь тоже корректен
                 player.addEffect(new MobEffectInstance(ModEffects.MANA_REGENERATION, 2400, 0, false, true, true));
             }
         }

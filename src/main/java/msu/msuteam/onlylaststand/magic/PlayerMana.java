@@ -11,7 +11,7 @@ public class PlayerMana implements INBTSerializable<CompoundTag> {
     private float maxMana;
 
     private static final float DEFAULT_MAX_MANA = 100.0f;
-    public static final float DEFAULT_MANA_REGEN = 5.0f / 20.0f; // 5 маны/сек (в тиках)
+    public static final float DEFAULT_MANA_REGEN = 5.0f / 20.0f;
 
     public PlayerMana() {
         this.maxMana = DEFAULT_MAX_MANA;
@@ -45,7 +45,6 @@ public class PlayerMana implements INBTSerializable<CompoundTag> {
         this.setCurrentMana(this.currentMana + amount);
     }
 
-    // ИСПРАВЛЕНО: Сигнатура метода изменена
     @Override
     public CompoundTag serializeNBT(HolderLookup.Provider provider) {
         CompoundTag nbt = new CompoundTag();
@@ -54,7 +53,6 @@ public class PlayerMana implements INBTSerializable<CompoundTag> {
         return nbt;
     }
 
-    // ИСПРАВЛЕНО: Сигнатура метода изменена
     @Override
     public void deserializeNBT(HolderLookup.Provider provider, CompoundTag nbt) {
         this.maxMana = nbt.contains("MaxMana") ? nbt.getFloat("MaxMana") : DEFAULT_MAX_MANA;

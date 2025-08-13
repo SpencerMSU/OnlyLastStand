@@ -19,7 +19,7 @@ import net.minecraft.world.item.component.ItemAttributeModifiers;
 import java.util.List;
 
 public class FinBracers extends AccessoryItem {
-    // ИСПРАВЛЕНО: Заменяем бонус на рабочий - Максимальное здоровье
+
     private static final ResourceLocation HEALTH_ID = ResourceLocation.fromNamespaceAndPath(OnlyLastStand.MODID, "fin_bracers_health");
 
     public FinBracers(Properties pProperties) {
@@ -31,7 +31,7 @@ public class FinBracers extends AccessoryItem {
         Rarity rarity = stack.get(ModDataComponents.ACCESSORY_RARITY);
         int level = stack.get(ModDataComponents.ACCESSORY_LEVEL);
         if (rarity == null) rarity = Rarity.COMMON;
-        // Даем небольшой бонус к здоровью
+
         double bonus = (1.0 + (level * 0.2)) * rarity.getMultiplier();
         return ItemAttributeModifiers.builder().add(Attributes.MAX_HEALTH, new AttributeModifier(HEALTH_ID, bonus, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.ANY).build();
     }
@@ -44,7 +44,7 @@ public class FinBracers extends AccessoryItem {
         int level = pStack.get(ModDataComponents.ACCESSORY_LEVEL);
         if (rarity == null) rarity = Rarity.COMMON;
         double bonus = (1.0 + (level * 0.2)) * rarity.getMultiplier();
-        // Используем существующий ключ локализации для здоровья
+
         pTooltipComponents.add(Component.translatable("tooltip.onlylaststand.buff.health", String.format("+%.1f", bonus)));
     }
 }

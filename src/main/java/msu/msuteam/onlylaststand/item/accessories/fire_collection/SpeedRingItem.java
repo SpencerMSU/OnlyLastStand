@@ -24,7 +24,6 @@ public class SpeedRingItem extends AccessoryItem {
         super(pProperties, SlotType.SIGNET, CollectionType.FIRE);
     }
 
-    // ИСПРАВЛЕНО: Теперь мы переопределяем наш кастомный метод
     @Override
     public ItemAttributeModifiers getAccessoryAttributeModifiers(ItemStack stack) {
         Rarity rarity = stack.get(ModDataComponents.ACCESSORY_RARITY);

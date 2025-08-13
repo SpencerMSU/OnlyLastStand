@@ -36,12 +36,7 @@ public class AccessoryItem extends Item {
         return ItemAttributeModifiers.EMPTY;
     }
 
-    /**
-     * Вызывается каждую секунду для каждого надетого аксессуара.
-     * Можно использовать для эффектов, не связанных с атрибутами.
-     */
     public void onAccessoryTick(ItemStack stack, Player player) {
-        // Базовый предмет ничего не делает
     }
 
     @Override

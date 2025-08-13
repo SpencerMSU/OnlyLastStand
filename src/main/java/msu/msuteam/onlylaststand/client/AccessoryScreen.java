@@ -38,16 +38,13 @@ public class AccessoryScreen extends AbstractContainerScreen<AccessoryMenu> {
         int topColor = 0xFF353535;
         int bottomColor = 0xFF4F4F4F;
 
-        // Фон основной панели
         pGuiGraphics.fillGradient(x, y, x + this.imageWidth, y + this.imageHeight, topColor, bottomColor);
 
-        // Фон панели бонусов
         int bonusPanelX = x + this.imageWidth;
         pGuiGraphics.fillGradient(bonusPanelX, y, bonusPanelX + this.bonusPanelWidth, y + this.imageHeight, topColor, bottomColor);
 
-        int borderColor = 0xFF000000; // Черный цвет для границ
+        int borderColor = 0xFF000000;
 
-        // --- ДОБАВЛЕНО: Рамки для слотов аксессуаров ---
         int accessorySlotsX = x + 61;
         int accessorySlotsY = y + 18;
         for (int i = 0; i < 3; i++) {
@@ -63,12 +60,10 @@ public class AccessoryScreen extends AbstractContainerScreen<AccessoryMenu> {
             }
         }
 
-        // Линия-разделитель
         int separatorY = y + 78;
         int separatorColor = 0xFF202020;
         pGuiGraphics.fill(x + 4, separatorY, x + this.imageWidth - 4, separatorY + 1, separatorColor);
 
-        // --- ДОБАВЛЕНО: Рамки для инвентаря игрока ---
         int playerInvX = x + 8;
         int playerInvY = y + 86;
         for (int i = 0; i < 3; ++i) {
@@ -84,8 +79,7 @@ public class AccessoryScreen extends AbstractContainerScreen<AccessoryMenu> {
             }
         }
 
-        // --- ДОБАВЛЕНО: Рамки для хотбара ---
-        int hotbarY = y + 144; // 86 + 58
+        int hotbarY = y + 144;
         for (int i = 0; i < 9; ++i) {
             int slotX = playerInvX + i * 18;
             int slotY = hotbarY;

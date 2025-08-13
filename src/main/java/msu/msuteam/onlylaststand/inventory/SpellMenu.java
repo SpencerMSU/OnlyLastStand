@@ -19,17 +19,14 @@ public class SpellMenu extends AbstractContainerMenu {
     public SpellMenu(int pContainerId, Inventory playerInventory, SpellInventory spellInventory) {
         super(ModMenuTypes.SPELL_MENU.get(), pContainerId);
 
-        // Слоты для заклинаний 2x5
         int spellInvX = 62;
         int spellInvY = 8;
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 2; j++) {
-                // ИСПРАВЛЕНО: Используем наш новый SpellSlot
                 this.addSlot(new SpellSlot(spellInventory, j + i * 2, spellInvX + j * 18, spellInvY + i * 18));
             }
         }
 
-        // Инвентарь игрока
         int playerInvX = 8;
         int playerInvY = 104;
         for (int i = 0; i < 3; ++i) {
@@ -38,7 +35,6 @@ public class SpellMenu extends AbstractContainerMenu {
             }
         }
 
-        // Хотбар
         for (int i = 0; i < 9; ++i) {
             this.addSlot(new Slot(playerInventory, i, playerInvX + i * 18, playerInvY + 58));
         }
@@ -63,7 +59,6 @@ public class SpellMenu extends AbstractContainerMenu {
                 return ItemStack.EMPTY;
             }
         } else {
-            // Перед перемещением в слоты заклинаний, проверяем, можно ли туда положить предмет
             if (this.slots.get(0).mayPlace(sourceStack)) {
                 if (!this.moveItemStackTo(sourceStack, 0, SLOTS, false)) {
                     return ItemStack.EMPTY;

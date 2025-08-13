@@ -19,7 +19,6 @@ public class AccessoryInventory extends ItemStackHandler {
     @Override
     protected void onContentsChanged(int slot) {
         if (this.player != null && !this.player.level().isClientSide) {
-            // Вызываем наш новый, надежный метод обновления
             PlayerEventHandler.updateAllPlayerModifiers(this.player);
         }
     }

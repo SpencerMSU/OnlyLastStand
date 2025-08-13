@@ -12,9 +12,7 @@ public class PacketHandler {
         registrar.playToServer(OpenAccessoryScreenPacket.TYPE, OpenAccessoryScreenPacket.STREAM_CODEC,
                 OpenAccessoryScreenPacket::handle);
 
-        // --- ДОБАВЬТЕ ЭТУ СТРОКУ ---
         registrar.playToServer(OpenSpellScreenPacket.TYPE, OpenSpellScreenPacket.STREAM_CODEC,
                 OpenSpellScreenPacket::handle);
-        // -------------------------
     }
 }

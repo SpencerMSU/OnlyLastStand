@@ -122,27 +122,22 @@ public class PlayerEventHandler {
         }
 
         if (isWearingFullSet(player, CollectionType.FIRE)) {
-            // Дебафф: Увеличенный урон от падения
             if (event.getSource().is(DamageTypes.FALL)) {
-                event.setAmount(event.getAmount() * 1.13f); // +13% урона
-                return; // Выходим, чтобы другие защиты не применялись к урону от падения
+                event.setAmount(event.getAmount() * 1.13f);
+                return;
             }
 
-            // Защита от Гастов и Блейзов
             if (event.getSource().getEntity() instanceof Ghast || event.getSource().getEntity() instanceof Blaze) {
-                event.setAmount(event.getAmount() * 0.65f); // -35% урона
+                event.setAmount(event.getAmount() * 0.65f);
             }
-            // Защита от других мобов в Аду
             else if (player.level().dimension().equals(Level.NETHER) && event.getSource().getEntity() instanceof Mob) {
-                event.setAmount(event.getAmount() * 0.85f); // -15% урона
+                event.setAmount(event.getAmount() * 0.85f);
             }
-            // Защита от лавы
             else if (event.getSource().is(DamageTypes.LAVA)) {
-                event.setAmount(event.getAmount() * 0.30f); // -70% урона
+                event.setAmount(event.getAmount() * 0.30f);
             }
         }
 
-        // Водный сет
         if (isWearingFullSet(player, CollectionType.WATER)) {
             if (event.getSource().getEntity() instanceof Player sourcePlayer && event.getEntity() instanceof LivingEntity target) {
                 if (sourcePlayer.isInWaterOrRain() && target.isInWaterOrRain()) {

@@ -22,7 +22,7 @@ public class GauntletsOfAlacrity extends AccessoryItem {
     private static final ResourceLocation ATTACK_SPEED_ID = ResourceLocation.fromNamespaceAndPath(OnlyLastStand.MODID, "gauntlets_attack_speed");
 
     public GauntletsOfAlacrity(Properties pProperties) {
-        super(pProperties, SlotType.GLOVES, CollectionType.FIRE); // Сл
+        super(pProperties, SlotType.GLOVES, CollectionType.FIRE);
     }
 
     @Override
