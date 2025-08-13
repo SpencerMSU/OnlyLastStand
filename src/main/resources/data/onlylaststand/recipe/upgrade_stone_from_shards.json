@@ -27,7 +27,7 @@
     }
   ],
   "result": {
-    "item": "onlylaststand:upgrade_stone",
+    "id": "onlylaststand:upgrade_stone",
     "count": 1
   }
 }

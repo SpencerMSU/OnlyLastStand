@@ -21,6 +21,14 @@ public class ModDataComponents {
             builder -> builder.persistent(Codec.STRING.xmap(Rarity::valueOf, Rarity::name))
                     .networkSynchronized(ByteBufCodecs.STRING_UTF8.map(Rarity::valueOf, Rarity::name)));
 
+    public static final Supplier<DataComponentType<Integer>> UPGRADE_ATTEMPT_ORIGINAL_LEVEL = register("upgrade_attempt_original_level",
+            builder -> builder.persistent(Codec.INT));
+
+    // --- ДОБАВЛЕНО: Компонент для хранения количества открытых слотов магии ---
+    public static final Supplier<DataComponentType<Integer>> UNLOCKED_SPELL_SLOTS = register("unlocked_spell_slots",
+            builder -> builder.persistent(Codec.INT).networkSynchronized(ByteBufCodecs.INT));
+    // -----------------------------------------------------------------------
+
     private static <T> Supplier<DataComponentType<T>> register(String name, UnaryOperator<DataComponentType.Builder<T>> operator) {
         return COMPONENT_TYPES.register(name, () -> operator.apply(DataComponentType.builder()).build());
     }

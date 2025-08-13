@@ -3,16 +3,25 @@ package msu.msuteam.onlylaststand.event;
 import msu.msuteam.onlylaststand.OnlyLastStand;
 import msu.msuteam.onlylaststand.component.ModDataComponents;
 import msu.msuteam.onlylaststand.core.ModItems;
+import msu.msuteam.onlylaststand.inventory.ModAttachments;
 import msu.msuteam.onlylaststand.item.accessories.AccessoryItem;
+import msu.msuteam.onlylaststand.skills.PlayerSkill;
+import msu.msuteam.onlylaststand.skills.PlayerSkills;
 import msu.msuteam.onlylaststand.util.Rarity;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.AnvilUpdateEvent;
 
+import java.util.Random;
+
 @EventBusSubscriber(modid = OnlyLastStand.MODID)
 public class AnvilEvents {
+
+    private static final Random random = new Random();
 
     @SubscribeEvent
     public static void onAnvilUpdate(AnvilUpdateEvent event) {
@@ -28,9 +37,19 @@ public class AnvilEvents {
             if (right.getCount() < stonesNeeded) return;
 
             out = left.copy();
-            out.set(ModDataComponents.ACCESSORY_LEVEL, currentLevel + 1);
 
-            event.setCost(stonesNeeded * 2);
+            PlayerSkills skills = event.getPlayer().getData(ModAttachments.PLAYER_SKILLS);
+            int smithingLevel = skills.getSkill(PlayerSkill.SMITHING).getLevel();
+            double smithingBonus = smithingLevel * 0.0005;
+            double successChance = Math.max(0.01, 1.0 / Math.pow(2, currentLevel)) + smithingBonus;
+
+            String chanceText = String.format("%.2f%%", successChance * 100);
+            out.set(DataComponents.CUSTOM_NAME, Component.literal("Улучшить? Шанс: " + chanceText).withStyle(ChatFormatting.YELLOW));
+
+            float discount = 1.0f - (smithingLevel * 0.0045f);
+            int finalCost = Math.max(1, (int)((stonesNeeded * 2) * discount));
+
+            event.setCost(finalCost);
             event.setMaterialCost(stonesNeeded);
             event.setOutput(out);
         }

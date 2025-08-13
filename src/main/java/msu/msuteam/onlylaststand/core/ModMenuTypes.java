@@ -2,6 +2,7 @@ package msu.msuteam.onlylaststand.core;
 
 import msu.msuteam.onlylaststand.OnlyLastStand;
 import msu.msuteam.onlylaststand.inventory.AccessoryMenu;
+import msu.msuteam.onlylaststand.inventory.SkillsMenu;
 import msu.msuteam.onlylaststand.inventory.SpellMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.neoforged.neoforge.common.extensions.IMenuTypeExtension;
@@ -19,4 +20,8 @@ public class ModMenuTypes {
 
     public static final Supplier<MenuType<SpellMenu>> SPELL_MENU =
             MENUS.register("spell_menu", () -> IMenuTypeExtension.create(SpellMenu::new));
+
+    // ИСПРАВЛЕНО: Теперь эта регистрация будет работать, так как у SkillsMenu есть нужный конструктор
+    public static final Supplier<MenuType<SkillsMenu>> SKILLS_MENU =
+            MENUS.register("skills_menu", () -> IMenuTypeExtension.create(SkillsMenu::new));
 }

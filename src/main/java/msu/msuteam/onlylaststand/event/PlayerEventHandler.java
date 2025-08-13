@@ -6,6 +6,8 @@ import msu.msuteam.onlylaststand.OnlyLastStand;
 import msu.msuteam.onlylaststand.inventory.AccessoryInventory;
 import msu.msuteam.onlylaststand.inventory.ModAttachments;
 import msu.msuteam.onlylaststand.item.accessories.AccessoryItem;
+import msu.msuteam.onlylaststand.skills.PlayerSkill;
+import msu.msuteam.onlylaststand.skills.PlayerSkills;
 import msu.msuteam.onlylaststand.util.CollectionType;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
@@ -39,6 +41,9 @@ public class PlayerEventHandler {
     private static final Map<UUID, Multimap<Holder<Attribute>, AttributeModifier>> lastAppliedModifiers = new HashMap<>();
     private static final ResourceLocation FIRE_SET_NETHER_BONUS_ID = ResourceLocation.fromNamespaceAndPath(OnlyLastStand.MODID, "fire_set_nether_bonus");
     private static final ResourceLocation WATER_SET_SWIM_SPEED_ID = ResourceLocation.fromNamespaceAndPath(OnlyLastStand.MODID, "water_set_swim_speed");
+
+    private static final ResourceLocation VITALITY_HEALTH_ID = ResourceLocation.fromNamespaceAndPath(OnlyLastStand.MODID, "vitality_health");
+    private static final ResourceLocation ACCURACY_BONUS_ID = ResourceLocation.fromNamespaceAndPath(OnlyLastStand.MODID, "accuracy_draw_speed");
 
     @SubscribeEvent
     public static void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
@@ -98,6 +103,21 @@ public class PlayerEventHandler {
             currentMods.put(NeoForgeMod.SWIM_SPEED, swimSpeedBonus);
         }
 
+        PlayerSkills skills = player.getData(ModAttachments.PLAYER_SKILLS);
+        if (skills != null) {
+            int vitalityLevel = skills.getSkill(PlayerSkill.VITALITY).getLevel();
+            double healthBonus = (vitalityLevel / 10) * 1.0;
+            if (healthBonus > 0) {
+                currentMods.put(Attributes.MAX_HEALTH, new AttributeModifier(VITALITY_HEALTH_ID, healthBonus, AttributeModifier.Operation.ADD_VALUE));
+            }
+
+            int accuracyLevel = skills.getSkill(PlayerSkill.ACCURACY).getLevel();
+            double drawSpeedBonus = accuracyLevel * 0.005;
+            if (drawSpeedBonus > 0) {
+                currentMods.put(Attributes.ATTACK_SPEED, new AttributeModifier(ACCURACY_BONUS_ID, drawSpeedBonus, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
+            }
+        }
+
         if (!currentMods.isEmpty()) {
             player.getAttributes().addTransientAttributeModifiers(currentMods);
         }
@@ -117,6 +137,15 @@ public class PlayerEventHandler {
 
     @SubscribeEvent
     public static void onLivingIncomingDamage(LivingIncomingDamageEvent event) {
+        if (event.getSource().getEntity() instanceof Player player) {
+            PlayerSkills skills = player.getData(ModAttachments.PLAYER_SKILLS);
+            if (skills != null) {
+                int combatLevel = skills.getSkill(PlayerSkill.COMBAT).getLevel();
+                float damageBonus = 1.0f + (combatLevel * 0.0015f);
+                event.setAmount(event.getAmount() * damageBonus);
+            }
+        }
+
         if (!(event.getEntity() instanceof Player player)) {
             return;
         }

@@ -5,7 +5,7 @@ import msu.msuteam.onlylaststand.magic.PlayerMana;
 import net.neoforged.neoforge.attachment.AttachmentType;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
-
+import msu.msuteam.onlylaststand.skills.PlayerSkills;
 import java.util.function.Supplier;
 
 public class ModAttachments {
@@ -20,5 +20,6 @@ public class ModAttachments {
 
     public static final Supplier<AttachmentType<SpellInventory>> SPELL_INVENTORY =
             ATTACHMENT_TYPES.register("spell_inventory", () -> AttachmentType.serializable(SpellInventory::new).build());
-
+    public static final Supplier<AttachmentType<PlayerSkills>> PLAYER_SKILLS =
+            ATTACHMENT_TYPES.register("player_skills", () -> AttachmentType.serializable(PlayerSkills::new).build());
 }
