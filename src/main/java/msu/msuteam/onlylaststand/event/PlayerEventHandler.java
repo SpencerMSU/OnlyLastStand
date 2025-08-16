@@ -5,12 +5,15 @@ import com.google.common.collect.Multimap;
 import msu.msuteam.onlylaststand.OnlyLastStand;
 import msu.msuteam.onlylaststand.inventory.AccessoryInventory;
 import msu.msuteam.onlylaststand.inventory.ModAttachments;
+import msu.msuteam.onlylaststand.inventory.SpellInventory;
 import msu.msuteam.onlylaststand.item.accessories.AccessoryItem;
+import msu.msuteam.onlylaststand.network.SyncSpellsPacket;
 import msu.msuteam.onlylaststand.skills.PlayerSkill;
 import msu.msuteam.onlylaststand.skills.PlayerSkills;
 import msu.msuteam.onlylaststand.util.CollectionType;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -30,6 +33,7 @@ import net.neoforged.neoforge.common.NeoForgeMod;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -65,6 +69,14 @@ public class PlayerEventHandler {
         if (!event.getLevel().isClientSide() && event.getEntity() instanceof Player player) {
             AccessoryInventory inventory = player.getData(ModAttachments.ACCESSORY_INVENTORY);
             inventory.setPlayer(player);
+
+            player.getData(ModAttachments.PLAYER_MANA).setPlayer(player);
+
+            if (player instanceof ServerPlayer serverPlayer) {
+                SpellInventory spellInventory = serverPlayer.getData(ModAttachments.SPELL_INVENTORY);
+                PacketDistributor.sendToPlayer(serverPlayer, new SyncSpellsPacket(spellInventory.serializeNBT(serverPlayer.registryAccess())));
+            }
+
             updateAllPlayerModifiers(player);
         }
     }

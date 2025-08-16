@@ -1,7 +1,6 @@
 package msu.msuteam.onlylaststand.network;
 
 import msu.msuteam.onlylaststand.OnlyLastStand;
-import msu.msuteam.onlylaststand.inventory.ModAttachments;
 import msu.msuteam.onlylaststand.inventory.SpellMenu;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -28,8 +27,9 @@ public record OpenSpellScreenPacket() implements CustomPacketPayload {
     public static void handle(final OpenSpellScreenPacket packet, final IPayloadContext context) {
         context.enqueueWork(() -> {
             if (context.player() instanceof ServerPlayer serverPlayer) {
+                // ИСПРАВЛЕНО: Вызываем простой конструктор, который нужен серверу
                 serverPlayer.openMenu(new SimpleMenuProvider(
-                        (id, inv, p) -> new SpellMenu(id, inv, serverPlayer.getData(ModAttachments.SPELL_INVENTORY)),
+                        (id, inv, p) -> new SpellMenu(id, inv),
                         Component.translatable("container.onlylaststand.spells")
                 ));
             }

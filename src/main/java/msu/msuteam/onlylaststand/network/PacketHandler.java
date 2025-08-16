@@ -1,6 +1,11 @@
 package msu.msuteam.onlylaststand.network;
+import msu.msuteam.onlylaststand.network.CastSpellPacket;
+import msu.msuteam.onlylaststand.network.SyncSpellsPacket;
+import msu.msuteam.onlylaststand.network.SpawnParticlesPacket;
 
 import msu.msuteam.onlylaststand.OnlyLastStand;
+import msu.msuteam.onlylaststand.network.SyncManaPacket;
+import msu.msuteam.onlylaststand.network.DisplayNotificationPacket;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import msu.msuteam.onlylaststand.network.OpenSkillsScreenPacket;
@@ -18,5 +23,10 @@ public class PacketHandler {
         registrar.playToServer(OpenSkillsScreenPacket.TYPE, OpenSkillsScreenPacket.STREAM_CODEC, OpenSkillsScreenPacket::handle);
         registrar.playToServer(RequestSkillsDataPacket.TYPE, RequestSkillsDataPacket.STREAM_CODEC, RequestSkillsDataPacket::handle);
         registrar.playToClient(SyncSkillsDataPacket.TYPE, SyncSkillsDataPacket.STREAM_CODEC, SyncSkillsDataPacket::handle);
+        registrar.playToServer(CastSpellPacket.TYPE, CastSpellPacket.STREAM_CODEC, CastSpellPacket::handle);
+        registrar.playToClient(SyncManaPacket.TYPE, SyncManaPacket.STREAM_CODEC, SyncManaPacket::handle);
+        registrar.playToClient(DisplayNotificationPacket.TYPE, DisplayNotificationPacket.STREAM_CODEC, DisplayNotificationPacket::handle);
+        registrar.playToClient(SyncSpellsPacket.TYPE, SyncSpellsPacket.STREAM_CODEC, SyncSpellsPacket::handle);
+        registrar.playToClient(SpawnParticlesPacket.TYPE, SpawnParticlesPacket.STREAM_CODEC, SpawnParticlesPacket::handle);
     }
 }

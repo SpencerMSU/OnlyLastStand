@@ -1,5 +1,6 @@
 package msu.msuteam.onlylaststand.inventory;
-
+import msu.msuteam.onlylaststand.skills.PlayerLearnedSpells;
+import msu.msuteam.onlylaststand.skills.PlayerSkills;
 import msu.msuteam.onlylaststand.OnlyLastStand;
 import msu.msuteam.onlylaststand.magic.PlayerMana;
 import net.neoforged.neoforge.attachment.AttachmentType;
@@ -17,6 +18,8 @@ public class ModAttachments {
 
     public static final Supplier<AttachmentType<PlayerMana>> PLAYER_MANA =
             ATTACHMENT_TYPES.register("player_mana", () -> AttachmentType.serializable(PlayerMana::new).build());
+    public static final Supplier<AttachmentType<PlayerLearnedSpells>> PLAYER_LEARNED_SPELLS =
+            ATTACHMENT_TYPES.register("player_learned_spells", () -> AttachmentType.serializable(PlayerLearnedSpells::new).build());
 
     public static final Supplier<AttachmentType<SpellInventory>> SPELL_INVENTORY =
             ATTACHMENT_TYPES.register("spell_inventory", () -> AttachmentType.serializable(SpellInventory::new).build());

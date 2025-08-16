@@ -14,7 +14,10 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.ProjectileImpactEvent;
@@ -22,6 +25,8 @@ import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.living.LivingHealEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
+
+import java.util.List;
 
 @EventBusSubscriber(modid = OnlyLastStand.MODID)
 public class SkillEvents {
@@ -53,26 +58,22 @@ public class SkillEvents {
             PlayerSkills skills = player.getData(ModAttachments.PLAYER_SKILLS);
             BlockState state = event.getState();
 
-            // --- ФЕРМЕРСТВО ---
             if (state.getBlock() instanceof CropBlock crop && crop.isMaxAge(state)) {
                 skills.getSkill(PlayerSkill.FARMING).addExperience(player, 15);
 
                 int farmingLevel = skills.getSkill(PlayerSkill.FARMING).getLevel();
                 double doubleChance = farmingLevel * 0.0017;
                 if (Math.random() < doubleChance) {
-                    // Отменяем стандартное событие и вручную выбрасываем удвоенный дроп
                     event.setCanceled(true);
                     Block.dropResources(state, player.level(), event.getPos(), player.level().getBlockEntity(event.getPos()), player, player.getMainHandItem());
                     Block.dropResources(state, player.level(), event.getPos(), player.level().getBlockEntity(event.getPos()), player, player.getMainHandItem());
                     player.level().destroyBlock(event.getPos(), false);
                 }
-                return; // Выходим, чтобы не начислять опыт за майнинг
             }
             if (state.is(Blocks.PUMPKIN) || state.is(Blocks.MELON)) {
                 skills.getSkill(PlayerSkill.FARMING).addExperience(player, 15);
             }
 
-            // --- МАЙНИНГ ---
             boolean isOre = state.is(BlockTags.COAL_ORES) || state.is(BlockTags.COPPER_ORES) || state.is(BlockTags.DIAMOND_ORES) ||
                     state.is(BlockTags.EMERALD_ORES) || state.is(BlockTags.GOLD_ORES) || state.is(BlockTags.IRON_ORES) ||
                     state.is(BlockTags.LAPIS_ORES) || state.is(BlockTags.REDSTONE_ORES);

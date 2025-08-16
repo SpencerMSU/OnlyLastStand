@@ -74,5 +74,14 @@
   "tooltip.onlylaststand.buff.dig_speed": "§e+%s к скорости копания",
   "effect.onlylaststand.mana_regeneration": "Усиленная регенерация маны",
   "container.onlylaststand.spells": "Заклинания",
-  "key.onlylaststand.open_spell_inventory": "Открыть инвентарь заклинаний"
+  "key.onlylaststand.open_spell_inventory": "Открыть инвентарь заклинаний",
+
+  "key.onlylaststand.open_spell_inventory": "Открыть инвентарь заклинаний",
+  "key.onlylaststand.cast_spell": "Использовать выбранное заклинание",
+  "item.onlylaststand.firebolt_spell": "Заклинание: Огненная стрела",
+  "item.onlylaststand.spark_spell": "Заклинание: Искорка",
+  "item.onlylaststand.flame_light_spell": "Заклинание: Пламенный свет",
+  "item.onlylaststand.firebolt_scroll": "Свиток: Огненная стрела",
+  "item.onlylaststand.spark_scroll": "Свиток: Искорка",
+  "item.onlylaststand.flame_light_scroll": "Свиток: Пламенный свет"
 }

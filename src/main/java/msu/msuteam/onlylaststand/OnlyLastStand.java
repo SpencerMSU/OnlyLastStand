@@ -50,7 +50,10 @@ public class OnlyLastStand {
                 output.accept(ModItems.WATER_SIGNET.get());
                 output.accept(ModItems.WATER_VAMBRACE.get());
                 output.accept(ModItems.WATER_GREAVES.get());
+                output.accept(ModItems.FIREBOLT_SPELL.get());
 
+                output.accept(ModItems.SPARK_SPELL.get());
+                output.accept(ModItems.FLAME_LIGHT_SPELL.get());
             }).build());
 
     public OnlyLastStand(IEventBus modEventBus, ModContainer modContainer) {

@@ -3,6 +3,10 @@ package msu.msuteam.onlylaststand.core;
 import msu.msuteam.onlylaststand.OnlyLastStand;
 import msu.msuteam.onlylaststand.item.accessories.fire_collection.*;
 import msu.msuteam.onlylaststand.item.accessories.water_collection.*;
+import msu.msuteam.onlylaststand.item.spells.RandomSpellScrollItem;
+import msu.msuteam.onlylaststand.item.spells.fire.FireboltSpell;
+import msu.msuteam.onlylaststand.item.spells.fire.FlameLightSpell;
+import msu.msuteam.onlylaststand.item.spells.fire.SparkSpell;
 import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -33,4 +37,14 @@ public class ModItems {
     public static final DeferredItem<Item> WATER_SIGNET = ITEMS.register("water_signet", () -> new PearlSignet(new Item.Properties().stacksTo(1)));
     public static final DeferredItem<Item> WATER_VAMBRACE = ITEMS.register("water_vambrace", () -> new FinBracers(new Item.Properties().stacksTo(1)));
     public static final DeferredItem<Item> WATER_GREAVES = ITEMS.register("water_greaves", () -> new AquaStriders(new Item.Properties().stacksTo(1)));
+
+    public static final DeferredItem<Item> FIREBOLT_SPELL = ITEMS.register("firebolt_spell",
+            () -> new FireboltSpell(new Item.Properties()));
+    public static final DeferredItem<Item> SPARK_SPELL = ITEMS.register("spark_spell",
+            () -> new SparkSpell(new Item.Properties()));
+    public static final DeferredItem<Item> FLAME_LIGHT_SPELL = ITEMS.register("flame_light_spell",
+            () -> new FlameLightSpell(new Item.Properties()));
+
+    public static final DeferredItem<Item> FIRE_SPELL_SCROLL = ITEMS.register("fire_spell_scroll",
+            () -> new RandomSpellScrollItem(new Item.Properties()));
 }

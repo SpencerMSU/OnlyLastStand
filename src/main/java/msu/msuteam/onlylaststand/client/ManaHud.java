@@ -4,6 +4,7 @@ import msu.msuteam.onlylaststand.inventory.ModAttachments;
 import msu.msuteam.onlylaststand.magic.PlayerMana;
 import msu.msuteam.onlylaststand.skills.PlayerSkills;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -27,11 +28,21 @@ public class ManaHud {
         int manaBarHeight = 100;
         int x = screenWidth - manaBarWidth - 25;
         int y = screenHeight / 2 - manaBarHeight / 2 - 50;
+
         guiGraphics.fill(x - 2, y - 2, x + manaBarWidth + 2, y + manaBarHeight + 2, 0xFF000000);
         guiGraphics.fill(x, y, x + manaBarWidth, y + manaBarHeight, 0xFF333333);
         float manaPercentage = mana.getCurrentMana() / mana.getMaxMana();
         int filledHeight = (int) (manaBarHeight * manaPercentage);
         guiGraphics.fill(x, y + manaBarHeight - filledHeight, x + manaBarWidth, y + manaBarHeight, 0xFF00BFFF);
+
+        Font font = minecraft.font;
+        String manaText = String.format("%d/%d", (int)mana.getCurrentMana(), (int)mana.getMaxMana());
+        int textWidth = font.width(manaText);
+        guiGraphics.pose().pushPose();
+        float scale = 0.8f;
+        guiGraphics.pose().scale(scale, scale, scale);
+        guiGraphics.drawString(font, manaText, (int)((x + manaBarWidth / 2 - textWidth * scale / 2) / scale), (int)((y - 10) / scale), 0xFFFFFF);
+        guiGraphics.pose().popPose();
 
         int slotSize = 20;
         int slotSpacing = 4;
@@ -53,6 +64,10 @@ public class ManaHud {
                     guiGraphics.fill(slotX, slotY, slotX + slotSize, slotY + slotSize, 0xFF333333);
                     if (isSelected) {
                         guiGraphics.fill(slotX, slotY, slotX + slotSize, slotY + slotSize, 0x40FFFFFF);
+                    }
+                    ItemStack spellStack = minecraft.player.getData(ModAttachments.SPELL_INVENTORY).getStackInSlot(currentSlotIndex);
+                    if (!spellStack.isEmpty()) {
+                        guiGraphics.renderFakeItem(spellStack, slotX + 2, slotY + 2);
                     }
                 } else {
                     guiGraphics.fill(slotX - 2, slotY - 2, slotX + slotSize + 2, slotY + slotSize + 2, 0xFF000000);
