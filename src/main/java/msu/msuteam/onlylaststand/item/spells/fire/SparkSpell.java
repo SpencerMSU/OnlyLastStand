@@ -38,7 +38,6 @@ public class SparkSpell extends SpellItem {
         for (LivingEntity entity : level.getEntitiesOfClass(LivingEntity.class, area, e -> e != player && e.isAlive())) {
             Vec3 toEntity = entity.position().subtract(player.position()).normalize();
             if (toEntity.dot(lookAngle) > 0.7) {
-                // ИСПРАВЛЕНО: Используем правильный метод setRemainingFireTicks
                 entity.setRemainingFireTicks(4 * 20); // 4 секунды
                 entity.hurt(level.damageSources().indirectMagic(player, player), 2.0F);
             }

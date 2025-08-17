@@ -18,11 +18,9 @@ public class CauterizeSpell extends SpellItem {
 
     @Override
     protected void cast(Level level, Player player, ItemStack stack) {
-        // Наносим урон и лечим
         player.hurt(level.damageSources().magic(), 2.0F); // 1 сердце
         player.heal(6.0F); // 3 сердца
 
-        // Снимаем негативные эффекты
         player.removeEffect(MobEffects.POISON);
         player.removeEffect(MobEffects.WITHER);
 

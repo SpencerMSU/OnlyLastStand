@@ -4,7 +4,9 @@ import msu.msuteam.onlylaststand.OnlyLastStand;
 import msu.msuteam.onlylaststand.item.accessories.fire_collection.*;
 import msu.msuteam.onlylaststand.item.accessories.water_collection.*;
 import msu.msuteam.onlylaststand.item.spells.RandomSpellScrollItem;
+import msu.msuteam.onlylaststand.item.spells.fire.CauterizeSpell;
 import msu.msuteam.onlylaststand.item.spells.fire.FireboltSpell;
+import msu.msuteam.onlylaststand.item.spells.fire.FlameDashSpell;
 import msu.msuteam.onlylaststand.item.spells.fire.FlameLightSpell;
 import msu.msuteam.onlylaststand.item.spells.fire.SparkSpell;
 import net.minecraft.world.item.Item;
@@ -44,6 +46,10 @@ public class ModItems {
             () -> new SparkSpell(new Item.Properties()));
     public static final DeferredItem<Item> FLAME_LIGHT_SPELL = ITEMS.register("flame_light_spell",
             () -> new FlameLightSpell(new Item.Properties()));
+    public static final DeferredItem<Item> FLAME_DASH_SPELL = ITEMS.register("flame_dash_spell",
+            () -> new FlameDashSpell(new Item.Properties()));
+    public static final DeferredItem<Item> CAUTERIZE_SPELL = ITEMS.register("cauterize_spell",
+            () -> new CauterizeSpell(new Item.Properties()));
 
     public static final DeferredItem<Item> FIRE_SPELL_SCROLL = ITEMS.register("fire_spell_scroll",
             () -> new RandomSpellScrollItem(new Item.Properties()));

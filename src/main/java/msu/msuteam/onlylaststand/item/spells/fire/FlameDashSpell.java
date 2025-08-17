@@ -25,12 +25,10 @@ public class FlameDashSpell extends SpellItem {
         player.hurtMarked = true; // Для синхронизации движения
 
         if (level instanceof ServerLevel serverLevel) {
-            // Эффектный след из частиц
             for (int i = 0; i < 8; i++) {
                 Vec3 trailPos = player.position().subtract(lookAngle.scale(i * 0.5));
                 serverLevel.sendParticles(ParticleTypes.FLAME, trailPos.x, trailPos.y + 1, trailPos.z, 20, 0.3, 0.3, 0.3, 0);
             }
-            // Поджигаем землю
             BlockPos playerPos = player.blockPosition().below();
             if (level.getBlockState(playerPos).isSolid() && level.isEmptyBlock(playerPos.above())) {
                 level.setBlockAndUpdate(playerPos.above(), BaseFireBlock.getState(level, playerPos.above()));

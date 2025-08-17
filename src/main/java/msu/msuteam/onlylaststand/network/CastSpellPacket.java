@@ -9,7 +9,6 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
@@ -40,8 +39,8 @@ public record CastSpellPacket(int slotIndex) implements CustomPacketPayload {
                 if (packet.slotIndex >= 0 && packet.slotIndex < spellInventory.getSlots()) {
                     ItemStack spellStack = spellInventory.getStackInSlot(packet.slotIndex);
                     if (spellStack.getItem() instanceof SpellItem spell) {
-                        // Имитируем использование предмета
-                        spell.use(player.level(), player, InteractionHand.MAIN_HAND);
+                        // ИСПРАВЛЕНО: Вызываем новый, "чистый" метод для каста
+                        spell.doCast(player, spellStack);
                     }
                 }
             }

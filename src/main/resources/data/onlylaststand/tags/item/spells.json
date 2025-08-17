@@ -2,6 +2,8 @@
   "values": [
     "onlylaststand:firebolt_spell",
     "onlylaststand:spark_spell",
-    "onlylaststand:flame_light_spell"
+    "onlylaststand:flame_light_spell",
+    "onlylaststand:flame_dash_spell",
+    "onlylaststand:cauterize_spell"
   ]
 }
