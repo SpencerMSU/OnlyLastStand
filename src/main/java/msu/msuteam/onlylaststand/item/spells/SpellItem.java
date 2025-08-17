@@ -3,6 +3,8 @@ package msu.msuteam.onlylaststand.item.spells;
 import msu.msuteam.onlylaststand.inventory.ModAttachments;
 import msu.msuteam.onlylaststand.magic.PlayerMana;
 import msu.msuteam.onlylaststand.network.DisplayNotificationPacket;
+import msu.msuteam.onlylaststand.skills.PlayerSkill;
+import msu.msuteam.onlylaststand.skills.PlayerSkills;
 import msu.msuteam.onlylaststand.util.Rarity;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -36,13 +38,20 @@ public abstract class SpellItem extends Item {
     public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand) {
         ItemStack itemStack = pPlayer.getItemInHand(pUsedHand);
         PlayerMana mana = pPlayer.getData(ModAttachments.PLAYER_MANA);
+        PlayerSkills skills = pPlayer.getData(ModAttachments.PLAYER_SKILLS);
 
         if (!pLevel.isClientSide) {
             ServerPlayer serverPlayer = (ServerPlayer) pPlayer;
-            if (mana.getCurrentMana() >= this.manaCost) {
+
+            int magicLevel = skills.getSkill(PlayerSkill.MAGIC).getLevel();
+            float discount = 1.0f - (magicLevel * 0.005f);
+            int finalManaCost = (int) Math.max(1, this.manaCost * discount);
+
+            if (mana.getCurrentMana() >= finalManaCost) {
                 if (!pPlayer.getCooldowns().isOnCooldown(this)) {
                     cast(pLevel, pPlayer, itemStack);
-                    mana.consume(this.manaCost);
+                    mana.consume(finalManaCost);
+                    skills.getSkill(PlayerSkill.MAGIC).addExperience(pPlayer, this.rarity.getXpValue());
                     pPlayer.getCooldowns().addCooldown(this, this.cooldownTicks);
                     return InteractionResultHolder.success(itemStack);
                 } else {

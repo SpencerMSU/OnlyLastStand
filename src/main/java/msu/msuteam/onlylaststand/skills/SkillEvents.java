@@ -78,7 +78,17 @@ public class SkillEvents {
                     state.is(BlockTags.EMERALD_ORES) || state.is(BlockTags.GOLD_ORES) || state.is(BlockTags.IRON_ORES) ||
                     state.is(BlockTags.LAPIS_ORES) || state.is(BlockTags.REDSTONE_ORES);
 
-            if (state.is(BlockTags.BASE_STONE_OVERWORLD) || state.is(BlockTags.BASE_STONE_NETHER) || isOre) {
+            if (isOre) {
+                skills.getSkill(PlayerSkill.MINING).addExperience(player, 3);
+                int miningLevel = skills.getSkill(PlayerSkill.MINING).getLevel();
+                double doubleChance = miningLevel * 0.0013;
+                if (player.level().random.nextDouble() < doubleChance) {
+                    List<ItemStack> drops = Block.getDrops(state, (ServerLevel) player.level(), event.getPos(), null, player, player.getMainHandItem());
+                    for (ItemStack drop : drops) {
+                        Block.popResource(player.level(), event.getPos(), drop);
+                    }
+                }
+            } else if (state.is(BlockTags.BASE_STONE_OVERWORLD) || state.is(BlockTags.BASE_STONE_NETHER)) {
                 skills.getSkill(PlayerSkill.MINING).addExperience(player, 3);
             }
         }

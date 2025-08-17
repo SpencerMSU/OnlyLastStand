@@ -24,6 +24,10 @@ public class PlayerLearnedSpells implements INBTSerializable<CompoundTag> {
         learnedSpells.add(BuiltInRegistries.ITEM.getKey(spellItem));
     }
 
+    public void forgetSpell(Item spellItem) {
+        learnedSpells.remove(BuiltInRegistries.ITEM.getKey(spellItem));
+    }
+
     @Override
     public CompoundTag serializeNBT(HolderLookup.Provider provider) {
         CompoundTag nbt = new CompoundTag();

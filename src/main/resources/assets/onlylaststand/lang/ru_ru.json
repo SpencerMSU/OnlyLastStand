@@ -83,5 +83,10 @@
   "item.onlylaststand.flame_light_spell": "Заклинание: Пламенный свет",
   "item.onlylaststand.firebolt_scroll": "Свиток: Огненная стрела",
   "item.onlylaststand.spark_scroll": "Свиток: Искорка",
-  "item.onlylaststand.flame_light_scroll": "Свиток: Пламенный свет"
+  "item.onlylaststand.flame_light_scroll": "Свиток: Пламенный свет",
+  "item.onlylaststand.firebolt_spell": "Заклинание: Огненная стрела",
+  "item.onlylaststand.spark_spell": "Заклинание: Искромет",
+  "item.onlylaststand.flame_light_spell": "Заклинание: Светоч",
+  "item.onlylaststand.flame_dash_spell": "Заклинание: Огненный рывок",
+  "item.onlylaststand.cauterize_spell": "Заклинание: Прижигание"
 }

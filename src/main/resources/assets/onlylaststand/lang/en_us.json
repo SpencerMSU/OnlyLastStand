@@ -68,5 +68,10 @@
   "item.onlylaststand.flame_light_spell": "Spell: Flame Light",
   "item.onlylaststand.firebolt_scroll": "Scroll: Firebolt",
   "item.onlylaststand.spark_scroll": "Scroll: Spark",
-  "item.onlylaststand.flame_light_scroll": "Scroll: Flame Light"
+  "item.onlylaststand.flame_light_scroll": "Scroll: Flame Light",
+  "item.onlylaststand.firebolt_spell": "Spell: Firebolt",
+  "item.onlylaststand.spark_spell": "Spell: Flame Shotgun",
+  "item.onlylaststand.flame_light_spell": "Spell: Ignis Lux",
+  "item.onlylaststand.flame_dash_spell": "Spell: Flame Dash",
+  "item.onlylaststand.cauterize_spell": "Spell: Cauterize"
 }

@@ -7,7 +7,9 @@ import msu.msuteam.onlylaststand.inventory.AccessoryInventory;
 import msu.msuteam.onlylaststand.inventory.ModAttachments;
 import msu.msuteam.onlylaststand.inventory.SpellInventory;
 import msu.msuteam.onlylaststand.item.accessories.AccessoryItem;
+import msu.msuteam.onlylaststand.network.SyncLearnedSpellsPacket;
 import msu.msuteam.onlylaststand.network.SyncSpellsPacket;
+import msu.msuteam.onlylaststand.skills.PlayerLearnedSpells;
 import msu.msuteam.onlylaststand.skills.PlayerSkill;
 import msu.msuteam.onlylaststand.skills.PlayerSkills;
 import msu.msuteam.onlylaststand.util.CollectionType;
@@ -33,6 +35,7 @@ import net.neoforged.neoforge.common.NeoForgeMod;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.HashMap;
@@ -48,6 +51,22 @@ public class PlayerEventHandler {
 
     private static final ResourceLocation VITALITY_HEALTH_ID = ResourceLocation.fromNamespaceAndPath(OnlyLastStand.MODID, "vitality_health");
     private static final ResourceLocation ACCURACY_BONUS_ID = ResourceLocation.fromNamespaceAndPath(OnlyLastStand.MODID, "accuracy_draw_speed");
+
+    @SubscribeEvent
+    public static void onPlayerTick(PlayerTickEvent.Post event) {
+        Player player = event.getEntity();
+        if (!player.level().isClientSide && player.tickCount % 1200 == 0) { // Проверка раз в 60 секунд (1200 тиков)
+            PlayerSkills skills = player.getData(ModAttachments.PLAYER_SKILLS);
+            SpellInventory spellInventory = player.getData(ModAttachments.SPELL_INVENTORY);
+            int unlockedSlots = skills.getUnlockedSpellSlots();
+
+            for (int i = unlockedSlots; i < spellInventory.getSlots(); i++) {
+                if (!spellInventory.getStackInSlot(i).isEmpty()) {
+                    spellInventory.setStackInSlot(i, ItemStack.EMPTY);
+                }
+            }
+        }
+    }
 
     @SubscribeEvent
     public static void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
@@ -75,6 +94,9 @@ public class PlayerEventHandler {
             if (player instanceof ServerPlayer serverPlayer) {
                 SpellInventory spellInventory = serverPlayer.getData(ModAttachments.SPELL_INVENTORY);
                 PacketDistributor.sendToPlayer(serverPlayer, new SyncSpellsPacket(spellInventory.serializeNBT(serverPlayer.registryAccess())));
+
+                PlayerLearnedSpells learnedSpells = serverPlayer.getData(ModAttachments.PLAYER_LEARNED_SPELLS);
+                PacketDistributor.sendToPlayer(serverPlayer, new SyncLearnedSpellsPacket(learnedSpells.serializeNBT(serverPlayer.registryAccess())));
             }
 
             updateAllPlayerModifiers(player);

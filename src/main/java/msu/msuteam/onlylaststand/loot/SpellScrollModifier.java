@@ -20,8 +20,8 @@ public class SpellScrollModifier extends LootModifier {
 
     @Override
     protected @NotNull ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot, LootContext context) {
-        if (context.getRandom().nextFloat() < 0.15f) {
-            // ИСПРАВЛЕНО: Добавляем один-единственный правильный свиток
+        // ИСПРАВЛЕНО: Шанс изменен на 3%
+        if (context.getRandom().nextFloat() < 0.03f) {
             generatedLoot.add(new ItemStack(ModItems.FIRE_SPELL_SCROLL.get()));
         }
         return generatedLoot;
