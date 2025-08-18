@@ -88,5 +88,11 @@
   "item.onlylaststand.spark_spell": "Заклинание: Искромет",
   "item.onlylaststand.flame_light_spell": "Заклинание: Светоч",
   "item.onlylaststand.flame_dash_spell": "Заклинание: Огненный рывок",
-  "item.onlylaststand.cauterize_spell": "Заклинание: Прижигание"
+  "item.onlylaststand.cauterize_spell": "Заклинание: Прижигание",
+
+  "item.onlylaststand.immolation_spell": "Заклинание: Самосожжение",
+  "item.onlylaststand.meteor_spell": "Заклинание: Метеорит",
+  "item.onlylaststand.tidal_wave_spell": "Заклинание: Приливная волна",
+  "item.onlylaststand.geyser_spell": "Заклинание: Гейзер",
+  "item.onlylaststand.mending_mist_spell": "Заклинание: Исцеляющий туман"
 }

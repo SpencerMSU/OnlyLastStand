@@ -4,6 +4,8 @@
     "onlylaststand:spark_spell",
     "onlylaststand:flame_light_spell",
     "onlylaststand:flame_dash_spell",
-    "onlylaststand:cauterize_spell"
+    "onlylaststand:cauterize_spell",
+    "onlylaststand:immolation_spell",
+    "onlylaststand:meteor_spell"
   ]
 }

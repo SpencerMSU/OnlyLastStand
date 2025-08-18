@@ -73,5 +73,11 @@
   "item.onlylaststand.spark_spell": "Spell: Flame Shotgun",
   "item.onlylaststand.flame_light_spell": "Spell: Ignis Lux",
   "item.onlylaststand.flame_dash_spell": "Spell: Flame Dash",
-  "item.onlylaststand.cauterize_spell": "Spell: Cauterize"
+  "item.onlylaststand.cauterize_spell": "Spell: Cauterize",
+
+  "item.onlylaststand.immolation_spell": "Spell: Immolation",
+  "item.onlylaststand.meteor_spell": "Spell: Meteor",
+  "item.onlylaststand.tidal_wave_spell": "Spell: Tidal Wave",
+  "item.onlylaststand.geyser_spell": "Spell: Geyser",
+  "item.onlylaststand.mending_mist_spell": "Spell: Mending Mist"
 }

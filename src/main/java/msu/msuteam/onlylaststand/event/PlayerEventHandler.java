@@ -1,5 +1,5 @@
 package msu.msuteam.onlylaststand.event;
-
+import msu.msuteam.onlylaststand.item.spells.fire.ImmolationSpell;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import msu.msuteam.onlylaststand.OnlyLastStand;
@@ -55,16 +55,19 @@ public class PlayerEventHandler {
     @SubscribeEvent
     public static void onPlayerTick(PlayerTickEvent.Post event) {
         Player player = event.getEntity();
-        if (!player.level().isClientSide && player.tickCount % 1200 == 0) { // Проверка раз в 60 секунд (1200 тиков)
-            PlayerSkills skills = player.getData(ModAttachments.PLAYER_SKILLS);
-            SpellInventory spellInventory = player.getData(ModAttachments.SPELL_INVENTORY);
-            int unlockedSlots = skills.getUnlockedSpellSlots();
+        if (!player.level().isClientSide) {
+            if (player.tickCount % 1200 == 0) { // Проверка раз в 60 секунд (1200 тиков)
+                PlayerSkills skills = player.getData(ModAttachments.PLAYER_SKILLS);
+                SpellInventory spellInventory = player.getData(ModAttachments.SPELL_INVENTORY);
+                int unlockedSlots = skills.getUnlockedSpellSlots();
 
-            for (int i = unlockedSlots; i < spellInventory.getSlots(); i++) {
-                if (!spellInventory.getStackInSlot(i).isEmpty()) {
-                    spellInventory.setStackInSlot(i, ItemStack.EMPTY);
+                for (int i = unlockedSlots; i < spellInventory.getSlots(); i++) {
+                    if (!spellInventory.getStackInSlot(i).isEmpty()) {
+                        spellInventory.setStackInSlot(i, ItemStack.EMPTY);
+                    }
                 }
             }
+            ImmolationSpell.onPlayerTick(event.getEntity());
         }
     }
 

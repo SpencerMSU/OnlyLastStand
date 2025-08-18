@@ -49,14 +49,44 @@ public class SpellScreen extends AbstractContainerScreen<SpellMenu> {
 
     @Override
     public void render(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
-        this.renderBackground(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
-        renderGuiElements(pGuiGraphics);
+        // ВАЖНО: Вызываем super.render() ПЕРЕД всем остальным.
+        // Это установит hoveredSlot и отрисует фон и слоты.
+        super.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
+
+        // Теперь отрисовываем подсказки поверх всего, включая каталог.
         this.renderTooltip(pGuiGraphics, pMouseX, pMouseY);
+
+        // И в самом конце рисуем предмет на курсоре.
         pGuiGraphics.renderItem(this.menu.getCarried(), pMouseX - 8, pMouseY - 8);
     }
 
-    @Override protected void renderBg(GuiGraphics pGuiGraphics, float pPartialTick, int pMouseX, int pMouseY) {}
-    @Override protected void renderLabels(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY) {}
+    @Override
+    protected void renderTooltip(GuiGraphics pGuiGraphics, int pX, int pY) {
+        // Сначала вызываем стандартный метод для подсказок над слотами.
+        super.renderTooltip(pGuiGraphics, pX, pY);
+
+        // Затем добавляем нашу логику для подсказок над каталогом.
+        for (int i = 0; i < this.catalogItems.size(); i++) {
+            int col = i % 2;
+            int row = i / 2;
+            int slotX = this.leftPos + 8 + col * 18;
+            int slotY = this.topPos + 18 + row * 18;
+            if (isMouseOver(pX, pY, slotX, slotY, 16, 16)) {
+                pGuiGraphics.renderTooltip(this.font, this.catalogItems.get(i), pX, pY);
+            }
+        }
+    }
+
+    @Override
+    protected void renderBg(GuiGraphics pGuiGraphics, float pPartialTick, int pMouseX, int pMouseY) {
+        // Всю нашу кастомную отрисовку переносим сюда.
+        renderGuiElements(pGuiGraphics);
+    }
+
+    @Override
+    protected void renderLabels(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY) {
+        // Оставляем пустым, чтобы не было стандартных надписей "Inventory" и т.д.
+    }
 
     private void renderGuiElements(GuiGraphics pGuiGraphics) {
         int x = this.leftPos;
@@ -94,34 +124,24 @@ public class SpellScreen extends AbstractContainerScreen<SpellMenu> {
         for (Slot slot : this.menu.slots) {
             int slotX = x + slot.x;
             int slotY = y + slot.y;
-            pGuiGraphics.fill(slotX - 1, slotY - 1, slotX + 17, slotY + 17, slotColor);
-            renderSlotBorder(pGuiGraphics, slotX, slotY, borderColor);
-            pGuiGraphics.renderItem(slot.getItem(), slotX, slotY);
+            // Убираем отрисовку слотов отсюда, так как она теперь в super.render()
             if (slot.index >= unlockedSlots) {
                 pGuiGraphics.renderFakeItem(LOCKED_SLOT_ICON, slotX, slotY);
             }
         }
     }
 
-    private void renderTooltips(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY) {
-        for (Slot slot : this.menu.slots) {
-            if (isMouseOver(pMouseX, pMouseY, this.leftPos + slot.x, this.topPos + slot.y, 16, 16) && slot.hasItem()) {
-                pGuiGraphics.renderTooltip(this.font, slot.getItem(), pMouseX, pMouseY);
-            }
-        }
-        for (int i = 0; i < this.catalogItems.size(); i++) {
-            int col = i % 2;
-            int row = i / 2;
-            int slotX = this.leftPos + 8 + col * 18;
-            int slotY = this.topPos + 18 + row * 18;
-            if (isMouseOver(pMouseX, pMouseY, slotX, slotY, 16, 16)) {
-                pGuiGraphics.renderTooltip(this.font, this.catalogItems.get(i), pMouseX, pMouseY);
-            }
-        }
-    }
-
     @Override
     public boolean mouseClicked(double pMouseX, double pMouseY, int pButton) {
+        // --- ИСПРАВЛЕНИЕ #1: Возвращаем логику для предотвращения выбрасывания ---
+        boolean isOutside = pMouseX < this.leftPos || pMouseY < this.topPos || pMouseX >= this.leftPos + this.imageWidth || pMouseY >= this.topPos + this.imageHeight;
+        if (pButton == 0 && !this.menu.getCarried().isEmpty() && isOutside) {
+            // Просто очищаем курсор на клиенте. Сервер сделает то же самое при следующем обновлении.
+            this.menu.setCarried(ItemStack.EMPTY);
+            return true; // "Съедаем" клик
+        }
+        // --------------------------------------------------------------------------
+
         if (pButton == 0) {
             for (int i = 0; i < this.catalogItems.size(); i++) {
                 int col = i % 2;
