@@ -39,7 +39,6 @@ public record PickupVirtualSpellPacket(ResourceLocation spellId) implements Cust
             if (context.player() instanceof ServerPlayer player && player.containerMenu instanceof SpellMenu spellMenu) {
                 Optional<Item> spellItem = BuiltInRegistries.ITEM.getOptional(packet.spellId);
                 spellItem.ifPresent(item -> {
-                    // Эта команда обновит предмет на курсоре на сервере и отправит обновление клиенту
                     spellMenu.setCarried(new ItemStack(item));
                 });
             }

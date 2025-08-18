@@ -22,8 +22,6 @@ public class PacketHandler {
         registrar.playToClient(SpawnParticlesPacket.TYPE, SpawnParticlesPacket.STREAM_CODEC, SpawnParticlesPacket::handle);
         registrar.playToClient(SyncLearnedSpellsPacket.TYPE, SyncLearnedSpellsPacket.STREAM_CODEC, SyncLearnedSpellsPacket::handle);
         registrar.playToServer(RequestLearnedSpellsPacket.TYPE, RequestLearnedSpellsPacket.STREAM_CODEC, RequestLearnedSpellsPacket::handle);
-
-        // ДОБАВЛЕНО
-        registrar.playToServer(ModifySpellSlotPacket.TYPE, ModifySpellSlotPacket.STREAM_CODEC, ModifySpellSlotPacket::handle);
+        registrar.playToServer(PickupVirtualSpellPacket.TYPE, PickupVirtualSpellPacket.STREAM_CODEC, PickupVirtualSpellPacket::handle);
     }
 }

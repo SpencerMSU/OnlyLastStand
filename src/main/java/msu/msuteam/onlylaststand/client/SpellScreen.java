@@ -2,7 +2,7 @@ package msu.msuteam.onlylaststand.client;
 
 import msu.msuteam.onlylaststand.inventory.ModAttachments;
 import msu.msuteam.onlylaststand.inventory.SpellMenu;
-import msu.msuteam.onlylaststand.network.ModifySpellSlotPacket;
+import msu.msuteam.onlylaststand.network.PickupVirtualSpellPacket;
 import msu.msuteam.onlylaststand.network.RequestLearnedSpellsPacket;
 import msu.msuteam.onlylaststand.skills.PlayerLearnedSpells;
 import msu.msuteam.onlylaststand.skills.PlayerSkills;
@@ -47,20 +47,14 @@ public class SpellScreen extends AbstractContainerScreen<SpellMenu> {
         PacketDistributor.sendToServer(RequestLearnedSpellsPacket.INSTANCE);
     }
 
-    // ИСПОЛЬЗУЕМ ПОЛНОСТЬЮ РУЧНУЮ ОТРИСОВКУ, КАК ТЫ И УКАЗАЛ
     @Override
     public void render(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
-        // 1. Затемняем фон мира
         this.renderBackground(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
-        // 2. Рисуем все элементы нашего ГУИ
         renderGuiElements(pGuiGraphics);
-        // 3. Рисуем подсказки поверх всего
-        renderTooltips(pGuiGraphics, pMouseX, pMouseY);
-        // 4. Рисуем предмет на курсоре
+        this.renderTooltip(pGuiGraphics, pMouseX, pMouseY);
         pGuiGraphics.renderItem(this.menu.getCarried(), pMouseX - 8, pMouseY - 8);
     }
 
-    // Пустые методы, чтобы стандартная отрисовка не мешала
     @Override protected void renderBg(GuiGraphics pGuiGraphics, float pPartialTick, int pMouseX, int pMouseY) {}
     @Override protected void renderLabels(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY) {}
 
@@ -68,10 +62,8 @@ public class SpellScreen extends AbstractContainerScreen<SpellMenu> {
         int x = this.leftPos;
         int y = this.topPos;
 
-        // Фон
         pGuiGraphics.fill(x, y, x + this.imageWidth, y + this.imageHeight, 0xDD222222);
 
-        // Вкладки
         int fireTabColor = (selectedTab == 0) ? 0xFF3F3F3F : 0xFF2E2E2E;
         pGuiGraphics.fill(x - 28, y + 4, x, y + 32, fireTabColor);
         pGuiGraphics.renderFakeItem(new ItemStack(Items.BLAZE_POWDER), x - 22, y + 10);
@@ -83,7 +75,6 @@ public class SpellScreen extends AbstractContainerScreen<SpellMenu> {
         int borderColor = 0xFF000000;
         int slotColor = 0xFF1F1F1F;
 
-        // Отрисовка каталога (левая часть)
         for (int i = 0; i < 10; i++) {
             int col = i % 2;
             int row = i / 2;
@@ -96,10 +87,8 @@ public class SpellScreen extends AbstractContainerScreen<SpellMenu> {
             }
         }
 
-        // Разделитель
         pGuiGraphics.vLine(x + 47, y + 16, y + this.imageHeight - 1, borderColor);
 
-        // Отрисовка активных слотов (правая часть)
         PlayerSkills skills = this.minecraft.player.getData(ModAttachments.PLAYER_SKILLS);
         int unlockedSlots = skills.getUnlockedSpellSlots();
         for (Slot slot : this.menu.slots) {
@@ -115,13 +104,11 @@ public class SpellScreen extends AbstractContainerScreen<SpellMenu> {
     }
 
     private void renderTooltips(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY) {
-        // Подсказки для активных слотов
         for (Slot slot : this.menu.slots) {
             if (isMouseOver(pMouseX, pMouseY, this.leftPos + slot.x, this.topPos + slot.y, 16, 16) && slot.hasItem()) {
                 pGuiGraphics.renderTooltip(this.font, slot.getItem(), pMouseX, pMouseY);
             }
         }
-        // Подсказки для каталога
         for (int i = 0; i < this.catalogItems.size(); i++) {
             int col = i % 2;
             int row = i / 2;
@@ -133,16 +120,9 @@ public class SpellScreen extends AbstractContainerScreen<SpellMenu> {
         }
     }
 
-    // --- Остальная логика без изменений ---
     @Override
     public boolean mouseClicked(double pMouseX, double pMouseY, int pButton) {
         if (pButton == 0) {
-            for (Slot slot : this.menu.slots) {
-                if (isMouseOver(pMouseX, pMouseY, this.leftPos + slot.x, this.topPos + slot.y, 16, 16)) {
-                    handleSlotClick(slot);
-                    return true;
-                }
-            }
             for (int i = 0; i < this.catalogItems.size(); i++) {
                 int col = i % 2;
                 int row = i / 2;
@@ -150,32 +130,15 @@ public class SpellScreen extends AbstractContainerScreen<SpellMenu> {
                 int slotY = this.topPos + 18 + row * 18;
                 if (isMouseOver(pMouseX, pMouseY, slotX, slotY, 16, 16)) {
                     ItemStack clickedStack = this.catalogItems.get(i);
-                    if (!clickedStack.is(Items.BARRIER)) {
-                        this.menu.setCarried(clickedStack.copy());
+                    if (!clickedStack.is(Items.BARRIER) && this.menu.getCarried().isEmpty()) {
+                        PacketDistributor.sendToServer(new PickupVirtualSpellPacket(BuiltInRegistries.ITEM.getKey(clickedStack.getItem())));
+                        return true;
                     }
-                    return true;
                 }
             }
             if (handleTabClick(pMouseX, pMouseY)) return true;
-            if (!this.menu.getCarried().isEmpty()){
-                this.menu.setCarried(ItemStack.EMPTY);
-                return true;
-            }
         }
         return super.mouseClicked(pMouseX, pMouseY, pButton);
-    }
-
-    private void handleSlotClick(Slot slot) {
-        ItemStack carried = this.menu.getCarried();
-        if (!carried.isEmpty()) {
-            ResourceLocation carriedId = BuiltInRegistries.ITEM.getKey(carried.getItem());
-            PacketDistributor.sendToServer(new ModifySpellSlotPacket(slot.index, carriedId, ModifySpellSlotPacket.Action.SET));
-            this.menu.setCarried(ItemStack.EMPTY);
-        } else {
-            if (slot.hasItem()) {
-                PacketDistributor.sendToServer(new ModifySpellSlotPacket(slot.index, BuiltInRegistries.ITEM.getKey(slot.getItem().getItem()), ModifySpellSlotPacket.Action.CLEAR));
-            }
-        }
     }
 
     private boolean handleTabClick(double pMouseX, double pMouseY) {
