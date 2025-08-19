@@ -15,7 +15,8 @@ public class PlayerMana implements INBTSerializable<CompoundTag> {
     private float maxMana;
     private transient Player player; // Ссылка на игрока, не сохраняется
 
-    private static final float DEFAULT_MAX_MANA = 3000.0f;
+    // Базовое значение маны по умолчанию
+    private static final float DEFAULT_MAX_MANA = 300.0f;
     public static final float DEFAULT_MANA_REGEN = 5.0f / 20.0f;
 
     public PlayerMana() {
@@ -33,7 +34,7 @@ public class PlayerMana implements INBTSerializable<CompoundTag> {
     public void setCurrentMana(float amount) {
         float oldMana = this.currentMana;
         this.currentMana = Mth.clamp(amount, 0, this.maxMana);
-        if (oldMana != this.currentMana && player instanceof ServerPlayer serverPlayer) {
+        if (oldMana != this.currentMana && player instanceof ServerPlayer) {
             sync();
         }
     }
@@ -44,7 +45,7 @@ public class PlayerMana implements INBTSerializable<CompoundTag> {
         if (this.currentMana > this.maxMana) {
             this.currentMana = this.maxMana;
         }
-        if (oldMax != this.maxMana && player instanceof ServerPlayer serverPlayer) {
+        if (oldMax != this.maxMana && player instanceof ServerPlayer) {
             sync();
         }
     }
@@ -73,7 +74,11 @@ public class PlayerMana implements INBTSerializable<CompoundTag> {
 
     @Override
     public void deserializeNBT(HolderLookup.Provider provider, CompoundTag nbt) {
-        this.maxMana = nbt.contains("MaxMana") ? nbt.getFloat("MaxMana") : DEFAULT_MAX_MANA;
-        this.currentMana = nbt.getFloat("CurrentMana");
+        // Если значения отсутствуют в NBT, используем корректные дефолты
+        float loadedMax = nbt.contains("MaxMana") ? nbt.getFloat("MaxMana") : DEFAULT_MAX_MANA;
+        float loadedCurrent = nbt.contains("CurrentMana") ? nbt.getFloat("CurrentMana") : loadedMax;
+
+        this.maxMana = Math.max(1, loadedMax);
+        this.currentMana = Mth.clamp(loadedCurrent, 0, this.maxMana);
     }
 }

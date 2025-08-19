@@ -9,6 +9,7 @@ import msu.msuteam.onlylaststand.inventory.SpellInventory;
 import msu.msuteam.onlylaststand.item.accessories.AccessoryItem;
 import msu.msuteam.onlylaststand.item.spells.fire_school.FireShieldSpell;
 import msu.msuteam.onlylaststand.item.spells.fire_school.SatansHelpSpell;
+import msu.msuteam.onlylaststand.magic.PlayerMana;
 import msu.msuteam.onlylaststand.network.SyncLearnedSpellsPacket;
 import msu.msuteam.onlylaststand.network.SyncSpellsPacket;
 import msu.msuteam.onlylaststand.skills.PlayerLearnedSpells;
@@ -96,7 +97,9 @@ public class PlayerEventHandler {
             AccessoryInventory inventory = player.getData(ModAttachments.ACCESSORY_INVENTORY);
             inventory.setPlayer(player);
 
-            player.getData(ModAttachments.PLAYER_MANA).setPlayer(player);
+            PlayerMana mana = player.getData(ModAttachments.PLAYER_MANA);
+            mana.setPlayer(player);
+            mana.sync();
 
             if (player instanceof ServerPlayer serverPlayer) {
                 SpellInventory spellInventory = serverPlayer.getData(ModAttachments.SPELL_INVENTORY);

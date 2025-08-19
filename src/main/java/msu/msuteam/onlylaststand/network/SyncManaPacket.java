@@ -35,8 +35,9 @@ public record SyncManaPacket(float currentMana, float maxMana) implements Custom
         context.enqueueWork(() -> {
             if (Minecraft.getInstance().player != null) {
                 PlayerMana mana = Minecraft.getInstance().player.getData(ModAttachments.PLAYER_MANA);
-                mana.setCurrentMana(packet.currentMana);
+                // Сначала максимум, потом текущее значение, чтобы клампы были корректными
                 mana.setMaxMana(packet.maxMana);
+                mana.setCurrentMana(packet.currentMana);
             }
         });
     }
