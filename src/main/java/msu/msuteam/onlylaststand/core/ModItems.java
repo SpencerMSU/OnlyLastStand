@@ -17,10 +17,10 @@ public class ModItems {
     public static final DeferredItem<Item> UPGRADE_STONE = ITEMS.registerSimpleItem("upgrade_stone", new Item.Properties().stacksTo(16));
     public static final DeferredItem<Item> SYNERGY_STONE = ITEMS.registerSimpleItem("synergy_stone", new Item.Properties().stacksTo(16));
 
-    // Скроллы (плейсхолдер для совместимости с ModEvents/loot)
+    // Скролл (ожидается ModEvents/loot); если у тебя есть RandomSpellScrollItem — заменим ниже на него
     public static final DeferredItem<Item> FIRE_SPELL_SCROLL = ITEMS.registerSimpleItem("fire_spell_scroll", new Item.Properties().stacksTo(64));
 
-    // ОГНЕННЫЕ аксессуары (как были)
+    // ОГНЕННЫЕ аксессуары
     public static final DeferredItem<Item> FIRE_CROWN = ITEMS.register("fire_crown", () -> new CrownOfResilience(new Item.Properties().stacksTo(1)));
     public static final DeferredItem<Item> FIRE_AMULET = ITEMS.register("fire_amulet", () -> new AmuletOfVitality(new Item.Properties().stacksTo(1)));
     public static final DeferredItem<Item> FIRE_PAULDRON = ITEMS.register("fire_pauldron", () -> new PauldronOfFortitude(new Item.Properties().stacksTo(1)));
@@ -31,29 +31,29 @@ public class ModItems {
     public static final DeferredItem<Item> FIRE_VAMBRACE = ITEMS.register("fire_vambrace", () -> new VambraceOfStrength(new Item.Properties().stacksTo(1)));
     public static final DeferredItem<Item> FIRE_GREAVES = ITEMS.register("fire_greaves", () -> new GreavesOfSafety(new Item.Properties().stacksTo(1)));
 
-    // ВОДНЫЕ аксессуары (из имеющихся классов + плейсхолдеры для отсутствующих)
+    // ВОДНЫЕ аксессуары (из имеющихся классов + плейсхолдеры для совместимости с кодом)
     public static final DeferredItem<Item> WATER_CROWN = ITEMS.register("water_crown", () -> new TidalCrown(new Item.Properties().stacksTo(1)));
     public static final DeferredItem<Item> WATER_AMULET = ITEMS.register("water_amulet", () -> new AmuletOfTheAbyss(new Item.Properties().stacksTo(1)));
     public static final DeferredItem<Item> WATER_PAULDRON = ITEMS.register("water_pauldron", () -> new CoralPauldron(new Item.Properties().stacksTo(1)));
     public static final DeferredItem<Item> WATER_SPAULDER = ITEMS.register("water_spaulder", () -> new KelpSpaulder(new Item.Properties().stacksTo(1)));
-    // Эти пять ожидались другим кодом — если классов нет, используем плейсхолдеры, чтобы сборка проходила
+    // если у тебя есть HarpoonersGrips/RingOfTides/… — можно заменить ниже simpleItem на реальные классы
     public static final DeferredItem<Item> WATER_GAUNTLETS = ITEMS.registerSimpleItem("water_gauntlets", new Item.Properties().stacksTo(1));
     public static final DeferredItem<Item> WATER_BAND = ITEMS.registerSimpleItem("water_band", new Item.Properties().stacksTo(1));
-    public static final DeferredItem<Item> WATER_SIGNET = ITEMS.register("water_signet", () -> new PearlSignet(new Item.Properties().stacksTo(1))); // есть класс
+    public static final DeferredItem<Item> WATER_SIGNET = ITEMS.register("water_signet", () -> new PearlSignet(new Item.Properties().stacksTo(1)));
     public static final DeferredItem<Item> WATER_VAMBRACE = ITEMS.registerSimpleItem("water_vambrace", new Item.Properties().stacksTo(1));
     public static final DeferredItem<Item> WATER_GREAVES = ITEMS.registerSimpleItem("water_greaves", new Item.Properties().stacksTo(1));
 
-    // ОГНЕННЫЕ заклинания (для совместимости с OnlyLastStand)
+    // ОГНЕННЫЕ заклинания (все ключевые + доп.)
     public static final DeferredItem<Item> FIRE_PROJECTILE_SPELL = ITEMS.register("fire_projectile_spell", () -> new FireProjectileSpell(new Item.Properties().stacksTo(1)));
     public static final DeferredItem<Item> DRAGONS_BREATH_SPELL = ITEMS.registerSimpleItem("dragons_breath_spell", new Item.Properties().stacksTo(1)); // плейсхолдер, если класса нет
     public static final DeferredItem<Item> MAGMA_BLOOD_SPELL = ITEMS.register("magma_blood_spell", () -> new MagmaBloodSpell(new Item.Properties().stacksTo(1)));
     public static final DeferredItem<Item> FIRE_SHIELD_SPELL = ITEMS.register("fire_shield_spell", () -> new FireShieldSpell(new Item.Properties().stacksTo(1)));
     public static final DeferredItem<Item> FIRE_PILLAR_SPELL = ITEMS.register("fire_pillar_spell", () -> new FirePillarSpell(new Item.Properties().stacksTo(1)));
-    // Доп. огненные (если используешь их где-то)
     public static final DeferredItem<Item> BLADES_OF_FIRE_SPELL = ITEMS.register("blades_of_fire_spell", () -> new BladesOfFireSpell(new Item.Properties().stacksTo(1)));
     public static final DeferredItem<Item> HELP_FROM_HELL_SPELL = ITEMS.register("help_from_hell_spell", () -> new HelpFromHellSpell(new Item.Properties().stacksTo(1)));
-    public static final DeferredItem<Item> SATANS_HELP_SPELL = ITEMS.register("satans_help_spell", () -> new SatansHelpSpell(new Item.Properties().stacksTo(1)));
     public static final DeferredItem<Item> COSMIC_METEOR_SPELL = ITEMS.register("cosmic_meteor_spell", () -> new CosmicMeteorSpell(new Item.Properties().stacksTo(1)));
+    public static final DeferredItem<Item> SATANS_HELP_SPELL = ITEMS.register("satans_help_spell", () -> new SatansHelpSpell(new Item.Properties().stacksTo(1)));
+    public static final DeferredItem<Item> DEVILS_TOOLS_SPELL = ITEMS.register("devils_tools_spell", () -> new DevilsToolsSpell(new Item.Properties().stacksTo(1)));
 
     // ВОДНАЯ школа — 10 заклинаний, 6 редкостей
     public static final DeferredItem<Item> WATER_RIPPLE_DART = ITEMS.register("water_ripple_dart", () -> new RippleDartSpell(new Item.Properties().stacksTo(1)));
