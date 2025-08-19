@@ -30,22 +30,23 @@ import net.neoforged.neoforge.client.event.ScreenEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.lwjgl.glfw.GLFW;
 
-// ВНИМАНИЕ: снимаем аннотацию с bus = MOD. Эти методы регистрируются через modEventBus в OnlyLastStand.
+// Регистрируем клиентские MOD-события через аннотацию (экраны и хоткеи)
+@EventBusSubscriber(modid = OnlyLastStand.MODID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class ClientEvents {
 
-    // Регистрируется в OnlyLastStand через modEventBus.addListener(...) только на клиенте
+    @SubscribeEvent
     public static void onKeyRegister(RegisterKeyMappingsEvent event) {
         Keybindings.register(event);
     }
 
-    // Регистрируется в OnlyLastStand через modEventBus.addListener(...) только на клиенте
+    @SubscribeEvent
     public static void onRegisterMenuScreens(RegisterMenuScreensEvent event) {
         event.register(ModMenuTypes.ACCESSORY_MENU.get(), AccessoryScreen::new);
         event.register(ModMenuTypes.SPELL_MENU.get(), SpellScreen::new);
         event.register(ModMenuTypes.SKILLS_MENU.get(), SkillsScreen::new);
     }
 
-    // Всё ниже — обычные (Forge) клиентские события. Аннотация оставлена, но без параметра bus.
+    // Обычные клиентские события (общая шина Forge)
     @EventBusSubscriber(modid = OnlyLastStand.MODID, value = Dist.CLIENT)
     public static class ClientForgeEvents {
         private static Button skillsButton;
@@ -74,6 +75,9 @@ public class ClientEvents {
             }
             if (Keybindings.OPEN_SPELL_KEY.consumeClick()) {
                 PacketDistributor.sendToServer(OpenSpellScreenPacket.INSTANCE);
+            }
+            if (Keybindings.OPEN_SKILLS_KEY.consumeClick()) {
+                PacketDistributor.sendToServer(OpenSkillsScreenPacket.INSTANCE);
             }
             if (Keybindings.CAST_SPELL_KEY.consumeClick()) {
                 PacketDistributor.sendToServer(new CastSpellPacket(ManaHud.selectedSlot));

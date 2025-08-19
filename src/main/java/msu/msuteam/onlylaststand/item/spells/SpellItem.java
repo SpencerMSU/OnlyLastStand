@@ -34,7 +34,6 @@ public abstract class SpellItem extends Item {
         this.cooldownTicks = cooldownTicks;
     }
 
-    // Этот метод теперь просто "обертка" для стандартного использования
     @Override
     public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand) {
         if (!pLevel.isClientSide()) {
@@ -43,7 +42,7 @@ public abstract class SpellItem extends Item {
         return InteractionResultHolder.pass(pPlayer.getItemInHand(pUsedHand));
     }
 
-    // ИСПРАВЛЕНО: Вся логика теперь в этом "чистом" методе, который вызывается напрямую
+    // ВАЖНО: привязываем проверку/установку КД к предмету из стека, а не к this
     public void doCast(ServerPlayer serverPlayer, ItemStack stack) {
         PlayerMana mana = serverPlayer.getData(ModAttachments.PLAYER_MANA);
         PlayerSkills skills = serverPlayer.getData(ModAttachments.PLAYER_SKILLS);
@@ -51,12 +50,14 @@ public abstract class SpellItem extends Item {
         float discount = 1.0f - (magicLevel * 0.005f);
         int finalManaCost = (int) Math.max(1, this.manaCost * discount);
 
+        Item cooldownKey = stack.getItem(); // ключ КД — конкретный предмет заклинания из слота
+
         if (mana.getCurrentMana() >= finalManaCost) {
-            if (!serverPlayer.getCooldowns().isOnCooldown(this)) {
+            if (!serverPlayer.getCooldowns().isOnCooldown(cooldownKey)) {
                 cast(serverPlayer.level(), serverPlayer, stack);
                 mana.consume(finalManaCost);
                 skills.getSkill(PlayerSkill.MAGIC).addExperience(serverPlayer, this.rarity.getXpValue());
-                serverPlayer.getCooldowns().addCooldown(this, this.cooldownTicks);
+                serverPlayer.getCooldowns().addCooldown(cooldownKey, this.cooldownTicks);
             } else {
                 PacketDistributor.sendToPlayer(serverPlayer, new DisplayNotificationPacket(Component.literal("Заклинание перезаряжается!")));
             }
@@ -65,7 +66,6 @@ public abstract class SpellItem extends Item {
             serverPlayer.playSound(SoundEvents.FIRE_EXTINGUISH, 1.0F, 1.0F);
         }
     }
-
 
     protected abstract void cast(Level level, Player player, ItemStack stack);
 
