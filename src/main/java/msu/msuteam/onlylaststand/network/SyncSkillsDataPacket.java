@@ -2,6 +2,8 @@ package msu.msuteam.onlylaststand.network;
 
 import msu.msuteam.onlylaststand.OnlyLastStand;
 import msu.msuteam.onlylaststand.client.SkillsScreen;
+import msu.msuteam.onlylaststand.client.SpellScreen;
+import msu.msuteam.onlylaststand.inventory.ModAttachments;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -32,8 +34,20 @@ public record SyncSkillsDataPacket(CompoundTag skillsNbt) implements CustomPacke
 
     public static void handle(final SyncSkillsDataPacket packet, final IPayloadContext context) {
         context.enqueueWork(() -> {
-            if (Minecraft.getInstance().screen instanceof SkillsScreen skillsScreen) {
+            var mc = Minecraft.getInstance();
+            if (mc.player != null) {
+                // 1) Обновляем клиентский аттачмент навыков: теперь SpellScreen видит актуальное число слотов
+                mc.player.getData(ModAttachments.PLAYER_SKILLS)
+                        .deserializeNBT(mc.player.registryAccess(), packet.skillsNbt);
+            }
+
+            // Обновляем экран навыков, если он открыт
+            if (mc.screen instanceof SkillsScreen skillsScreen) {
                 skillsScreen.updateSkillsData(packet.skillsNbt);
+            }
+            // 2) Форсим перерисовку экрана заклинаний — пропадет “бедрок” на открытых слотах
+            if (mc.screen instanceof SpellScreen spellScreen) {
+                spellScreen.updateSpellDisplay();
             }
         });
     }

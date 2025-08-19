@@ -10,5 +10,6 @@ public class ModCommands {
     @SubscribeEvent
     public static void onRegisterCommands(RegisterCommandsEvent event) {
         MagicCommand.register(event.getDispatcher());
+        SkillsCommand.register(event.getDispatcher());
     }
 }

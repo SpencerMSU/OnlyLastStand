@@ -4,6 +4,7 @@ import msu.msuteam.onlylaststand.inventory.ModAttachments;
 import msu.msuteam.onlylaststand.inventory.SpellMenu;
 import msu.msuteam.onlylaststand.network.PickupVirtualSpellPacket;
 import msu.msuteam.onlylaststand.network.RequestLearnedSpellsPacket;
+import msu.msuteam.onlylaststand.network.RequestSkillsDataPacket;
 import msu.msuteam.onlylaststand.skills.PlayerLearnedSpells;
 import msu.msuteam.onlylaststand.skills.PlayerSkills;
 import msu.msuteam.onlylaststand.util.ModTags;
@@ -45,6 +46,7 @@ public class SpellScreen extends AbstractContainerScreen<SpellMenu> {
     protected void init() {
         super.init();
         PacketDistributor.sendToServer(RequestLearnedSpellsPacket.INSTANCE);
+        PacketDistributor.sendToServer(RequestSkillsDataPacket.INSTANCE);
     }
 
     @Override

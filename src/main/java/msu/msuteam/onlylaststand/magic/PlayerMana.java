@@ -15,7 +15,7 @@ public class PlayerMana implements INBTSerializable<CompoundTag> {
     private float maxMana;
     private transient Player player; // Ссылка на игрока, не сохраняется
 
-    private static final float DEFAULT_MAX_MANA = 100.0f;
+    private static final float DEFAULT_MAX_MANA = 3000.0f;
     public static final float DEFAULT_MANA_REGEN = 5.0f / 20.0f;
 
     public PlayerMana() {

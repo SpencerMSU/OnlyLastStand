@@ -30,21 +30,22 @@ import net.neoforged.neoforge.client.event.ScreenEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.lwjgl.glfw.GLFW;
 
-@EventBusSubscriber(modid = OnlyLastStand.MODID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+// ВНИМАНИЕ: снимаем аннотацию с bus = MOD. Эти методы регистрируются через modEventBus в OnlyLastStand.
 public class ClientEvents {
 
-    @SubscribeEvent
+    // Регистрируется в OnlyLastStand через modEventBus.addListener(...) только на клиенте
     public static void onKeyRegister(RegisterKeyMappingsEvent event) {
         Keybindings.register(event);
     }
 
-    @SubscribeEvent
+    // Регистрируется в OnlyLastStand через modEventBus.addListener(...) только на клиенте
     public static void onRegisterMenuScreens(RegisterMenuScreensEvent event) {
         event.register(ModMenuTypes.ACCESSORY_MENU.get(), AccessoryScreen::new);
         event.register(ModMenuTypes.SPELL_MENU.get(), SpellScreen::new);
         event.register(ModMenuTypes.SKILLS_MENU.get(), SkillsScreen::new);
     }
 
+    // Всё ниже — обычные (Forge) клиентские события. Аннотация оставлена, но без параметра bus.
     @EventBusSubscriber(modid = OnlyLastStand.MODID, value = Dist.CLIENT)
     public static class ClientForgeEvents {
         private static Button skillsButton;
