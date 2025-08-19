@@ -1,5 +1,5 @@
 package msu.msuteam.onlylaststand.event;
-import msu.msuteam.onlylaststand.item.spells.fire.ImmolationSpell;
+
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import msu.msuteam.onlylaststand.OnlyLastStand;
@@ -7,6 +7,8 @@ import msu.msuteam.onlylaststand.inventory.AccessoryInventory;
 import msu.msuteam.onlylaststand.inventory.ModAttachments;
 import msu.msuteam.onlylaststand.inventory.SpellInventory;
 import msu.msuteam.onlylaststand.item.accessories.AccessoryItem;
+import msu.msuteam.onlylaststand.item.spells.fire_school.FireShieldSpell;
+import msu.msuteam.onlylaststand.item.spells.fire_school.SatansHelpSpell;
 import msu.msuteam.onlylaststand.network.SyncLearnedSpellsPacket;
 import msu.msuteam.onlylaststand.network.SyncSpellsPacket;
 import msu.msuteam.onlylaststand.skills.PlayerLearnedSpells;
@@ -33,6 +35,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.NeoForgeMod;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
+import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
@@ -67,7 +70,9 @@ public class PlayerEventHandler {
                     }
                 }
             }
-            ImmolationSpell.onPlayerTick(event.getEntity());
+            // Вызываем тики для заклинаний, которым это нужно
+            FireShieldSpell.onPlayerTick(player);
+            SatansHelpSpell.onPlayerTick(player);
         }
     }
 
@@ -209,6 +214,23 @@ public class PlayerEventHandler {
                 if (sourcePlayer.isInWaterOrRain() && target.isInWaterOrRain()) {
                     event.setAmount(event.getAmount() * 1.5f);
                 }
+            }
+        }
+    }
+
+    // ИСПРАВЛЕНО: Используем LivingDamageEvent
+    @SubscribeEvent
+    public static void onLivingDamage(LivingDamageEvent event) {
+        // ИСПРАВЛЕНО: Правильный способ получить атакующего
+        if (event.getSource().getEntity() instanceof Player player) {
+            // Клинки Огня
+            if (player.getPersistentData().contains("BladesOfFireTicks")) {
+                int currentFire = event.getEntity().getRemainingFireTicks();
+                event.getEntity().setRemainingFireTicks(currentFire + (1200)); // +1 минута горения
+            }
+            // Помощь Сатаны
+            if (player.getPersistentData().contains("SatansHelpTicks")) {
+                event.getEntity().getPersistentData().putInt("SatanicFireTicks", 200); // 10 секунд особого горения
             }
         }
     }

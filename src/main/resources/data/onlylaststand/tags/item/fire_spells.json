@@ -1,11 +1,14 @@
 {
   "values": [
-    "onlylaststand:firebolt_spell",
-    "onlylaststand:spark_spell",
-    "onlylaststand:flame_light_spell",
-    "onlylaststand:flame_dash_spell",
-    "onlylaststand:cauterize_spell",
-    "onlylaststand:immolation_spell",
-    "onlylaststand:meteor_spell"
+    "onlylaststand:fire_projectile_spell",
+    "onlylaststand:dragons_breath_spell",
+    "onlylaststand:magma_blood_spell",
+    "onlylaststand:fire_shield_spell",
+    "onlylaststand:fire_pillar_spell",
+    "onlylaststand:blades_of_fire_spell",
+    "onlylaststand:devils_tools_spell",
+    "onlylaststand:help_from_hell_spell",
+    "onlylaststand:cosmic_meteor_spell",
+    "onlylaststand:satans_help_spell"
   ]
 }

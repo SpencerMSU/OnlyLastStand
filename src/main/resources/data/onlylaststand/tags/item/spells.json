@@ -1,15 +1,6 @@
 {
   "replace": false,
   "values": [
-    "onlylaststand:firebolt_spell",
-    "onlylaststand:spark_spell",
-    "onlylaststand:flame_light_spell",
-    "onlylaststand:flame_dash_spell",
-    "onlylaststand:cauterize_spell",
-    "onlylaststand:immolation_spell",
-    "onlylaststand:meteor_spell",
-    "onlylaststand:tidal_wave_spell",
-    "onlylaststand:geyser_spell",
-    "onlylaststand:mending_mist_spell"
+    "#onlylaststand:fire_spells"
   ]
 }

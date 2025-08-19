@@ -50,10 +50,11 @@ public class OnlyLastStand {
                 output.accept(ModItems.WATER_SIGNET.get());
                 output.accept(ModItems.WATER_VAMBRACE.get());
                 output.accept(ModItems.WATER_GREAVES.get());
-                output.accept(ModItems.FIREBOLT_SPELL.get());
-
-                output.accept(ModItems.SPARK_SPELL.get());
-                output.accept(ModItems.FLAME_LIGHT_SPELL.get());
+                output.accept(ModItems.FIRE_PROJECTILE_SPELL.get());
+                output.accept(ModItems.DRAGONS_BREATH_SPELL.get());
+                output.accept(ModItems.MAGMA_BLOOD_SPELL.get());
+                output.accept(ModItems.FIRE_SHIELD_SPELL.get());
+                output.accept(ModItems.FIRE_PILLAR_SPELL.get());
             }).build());
 
     public OnlyLastStand(IEventBus modEventBus, ModContainer modContainer) {

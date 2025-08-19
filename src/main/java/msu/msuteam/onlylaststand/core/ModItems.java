@@ -4,7 +4,7 @@ import msu.msuteam.onlylaststand.OnlyLastStand;
 import msu.msuteam.onlylaststand.item.accessories.fire_collection.*;
 import msu.msuteam.onlylaststand.item.accessories.water_collection.*;
 import msu.msuteam.onlylaststand.item.spells.RandomSpellScrollItem;
-import msu.msuteam.onlylaststand.item.spells.fire.*;
+import msu.msuteam.onlylaststand.item.spells.fire_school.*;
 import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -36,26 +36,26 @@ public class ModItems {
     public static final DeferredItem<Item> WATER_VAMBRACE = ITEMS.register("water_vambrace", () -> new FinBracers(new Item.Properties().stacksTo(1)));
     public static final DeferredItem<Item> WATER_GREAVES = ITEMS.register("water_greaves", () -> new AquaStriders(new Item.Properties().stacksTo(1)));
 
-    public static final DeferredItem<Item> FIREBOLT_SPELL = ITEMS.register("firebolt_spell",
-            () -> new FireboltSpell(new Item.Properties()));
-    public static final DeferredItem<Item> SPARK_SPELL = ITEMS.register("spark_spell",
-            () -> new SparkSpell(new Item.Properties()));
-    public static final DeferredItem<Item> FLAME_LIGHT_SPELL = ITEMS.register("flame_light_spell",
-            () -> new FlameLightSpell(new Item.Properties()));
-
-
-    public static final DeferredItem<Item> IMMOLATION_SPELL = ITEMS.register("immolation_spell",
-            () -> new ImmolationSpell(new Item.Properties()));
-    public static final DeferredItem<Item> METEOR_SPELL = ITEMS.register("meteor_spell",
-            () -> new MeteorSpell(new Item.Properties()));
-
-    // WATER SPELLS
-    public static final DeferredItem<Item> TIDAL_WAVE_SPELL = ITEMS.register("tidal_wave_spell",
-            () -> new msu.msuteam.onlylaststand.item.spells.water.TidalWaveSpell(new Item.Properties()));
-    public static final DeferredItem<Item> GEYSER_SPELL = ITEMS.register("geyser_spell",
-            () -> new msu.msuteam.onlylaststand.item.spells.water.GeyserSpell(new Item.Properties()));
-    public static final DeferredItem<Item> MENDING_MIST_SPELL = ITEMS.register("mending_mist_spell",
-            () -> new msu.msuteam.onlylaststand.item.spells.water.MendingMistSpell(new Item.Properties()));
+    public static final DeferredItem<Item> FIRE_PROJECTILE_SPELL = ITEMS.register("fire_projectile_spell",
+            () -> new FireProjectileSpell(new Item.Properties()));
+    public static final DeferredItem<Item> DRAGONS_BREATH_SPELL = ITEMS.register("dragons_breath_spell",
+            () -> new DragonsBreathSpell(new Item.Properties()));
+    public static final DeferredItem<Item> MAGMA_BLOOD_SPELL = ITEMS.register("magma_blood_spell",
+            () -> new MagmaBloodSpell(new Item.Properties()));
+    public static final DeferredItem<Item> FIRE_SHIELD_SPELL = ITEMS.register("fire_shield_spell",
+            () -> new FireShieldSpell(new Item.Properties()));
+    public static final DeferredItem<Item> FIRE_PILLAR_SPELL = ITEMS.register("fire_pillar_spell",
+            () -> new FirePillarSpell(new Item.Properties()));
+    public static final DeferredItem<Item> BLADES_OF_FIRE_SPELL = ITEMS.register("blades_of_fire_spell",
+            () -> new BladesOfFireSpell(new Item.Properties()));
+    public static final DeferredItem<Item> DEVILS_TOOLS_SPELL = ITEMS.register("devils_tools_spell",
+            () -> new DevilsToolsSpell(new Item.Properties()));
+    public static final DeferredItem<Item> HELP_FROM_HELL_SPELL = ITEMS.register("help_from_hell_spell",
+            () -> new HelpFromHellSpell(new Item.Properties()));
+    public static final DeferredItem<Item> COSMIC_METEOR_SPELL = ITEMS.register("cosmic_meteor_spell",
+            () -> new CosmicMeteorSpell(new Item.Properties()));
+    public static final DeferredItem<Item> SATANS_HELP_SPELL = ITEMS.register("satans_help_spell",
+            () -> new SatansHelpSpell(new Item.Properties()));
     public static final DeferredItem<Item> FIRE_SPELL_SCROLL = ITEMS.register("fire_spell_scroll",
             () -> new RandomSpellScrollItem(new Item.Properties()));
 }

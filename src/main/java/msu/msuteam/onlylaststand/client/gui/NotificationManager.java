@@ -1,7 +1,7 @@
 package msu.msuteam.onlylaststand.client.gui;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Font; // <-- ДОБАВЛЕН ИМПОРТ
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 
@@ -27,14 +27,15 @@ public class NotificationManager {
         int yOffset = 0;
         for (Notification notification : NOTIFICATIONS) {
             notification.render(guiGraphics, yOffset);
-            yOffset += 12;
+            yOffset += 12; // Можно уменьшить, если текст будет накладываться
         }
     }
 
     private static class Notification {
         private final Component message;
         private int ticksRemaining;
-        private static final int MAX_TICKS = 60; // 3 секунды
+        // ИЗМЕНЕНО: Время жизни уменьшено в 2 раза (60 -> 30)
+        private static final int MAX_TICKS = 30; // 1.5 секунды
 
         Notification(Component message) {
             this.message = message;
@@ -56,14 +57,25 @@ public class NotificationManager {
             Font font = mc.font;
 
             float alpha = 1.0f;
-            if (this.ticksRemaining < 20) { // Fade out
-                alpha = this.ticksRemaining / 20.0f;
+            if (this.ticksRemaining < 15) { // Fade out на половине времени
+                alpha = this.ticksRemaining / 15.0f;
             }
 
             int color = (int) (alpha * 255.0f) << 24 | 0xFFFFFF;
             float yPos = screenHeight / 2.0f - 30 - yOffset + (MAX_TICKS - this.ticksRemaining) * 0.5f;
 
-            guiGraphics.drawCenteredString(font, this.message, screenWidth / 2, (int) yPos, color);
+            guiGraphics.pose().pushPose();
+            float scale = 0.7f; // Уменьшаем на 30%
+            guiGraphics.pose().scale(scale, scale, scale);
+
+
+            float scaledX = (screenWidth / 2.0f) / scale;
+            float scaledY = yPos / scale;
+
+            guiGraphics.drawCenteredString(font, this.message, (int) scaledX, (int) scaledY, color);
+
+            guiGraphics.pose().popPose();
+
         }
     }
 }

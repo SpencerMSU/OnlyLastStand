@@ -55,7 +55,6 @@ public class RandomSpellScrollItem extends Item {
             Item spellToLearn = unlearnedSpells.get(pLevel.random.nextInt(unlearnedSpells.size()));
             learnedSpells.learnSpell(spellToLearn);
 
-            // Отправляем пакет на клиент для обновления интерфейса
             if (pPlayer instanceof ServerPlayer serverPlayer) {
                 PacketDistributor.sendToPlayer(serverPlayer, new SyncLearnedSpellsPacket(learnedSpells.serializeNBT(serverPlayer.registryAccess())));
             }

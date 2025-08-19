@@ -10,7 +10,8 @@ public enum Rarity {
     EPIC("Epic", ChatFormatting.DARK_PURPLE, 3.0f, 30),
     LEGENDARY("Legendary", ChatFormatting.GOLD, 4.0f, 40),
     MYTHIC("Mythic", ChatFormatting.LIGHT_PURPLE, 5.0f, 50),
-    ABSOLUTE("Absolute", ChatFormatting.RED, 8.0f, 80);
+    ABSOLUTE("Absolute", ChatFormatting.RED, 8.0f, 80),
+    DEMONIC("Demonic", ChatFormatting.DARK_RED, 10.0f, 200); // <-- НОВАЯ РЕДКОСТЬ
 
     private final String name;
     private final ChatFormatting color;
