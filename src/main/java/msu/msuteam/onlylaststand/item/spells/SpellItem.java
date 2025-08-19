@@ -2,14 +2,13 @@ package msu.msuteam.onlylaststand.item.spells;
 
 import msu.msuteam.onlylaststand.inventory.ModAttachments;
 import msu.msuteam.onlylaststand.magic.PlayerMana;
-import msu.msuteam.onlylaststand.network.DisplayNotificationPacket;
 import msu.msuteam.onlylaststand.skills.PlayerSkill;
 import msu.msuteam.onlylaststand.skills.PlayerSkills;
+import msu.msuteam.onlylaststand.skills.PlayerSpellCooldowns;
 import msu.msuteam.onlylaststand.util.Rarity;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
@@ -17,7 +16,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.List;
 
@@ -42,7 +40,6 @@ public abstract class SpellItem extends Item {
         return InteractionResultHolder.pass(pPlayer.getItemInHand(pUsedHand));
     }
 
-    // ВАЖНО: привязываем проверку/установку КД к предмету из стека, а не к this
     public void doCast(ServerPlayer serverPlayer, ItemStack stack) {
         PlayerMana mana = serverPlayer.getData(ModAttachments.PLAYER_MANA);
         PlayerSkills skills = serverPlayer.getData(ModAttachments.PLAYER_SKILLS);
@@ -50,19 +47,26 @@ public abstract class SpellItem extends Item {
         float discount = 1.0f - (magicLevel * 0.005f);
         int finalManaCost = (int) Math.max(1, this.manaCost * discount);
 
-        Item cooldownKey = stack.getItem(); // ключ КД — конкретный предмет заклинания из слота
+        Item cooldownKey = stack.getItem();
 
         if (mana.getCurrentMana() >= finalManaCost) {
             if (!serverPlayer.getCooldowns().isOnCooldown(cooldownKey)) {
                 cast(serverPlayer.level(), serverPlayer, stack);
                 mana.consume(finalManaCost);
                 skills.getSkill(PlayerSkill.MAGIC).addExperience(serverPlayer, this.rarity.getXpValue());
+
+                // обычный визуальный КД
                 serverPlayer.getCooldowns().addCooldown(cooldownKey, this.cooldownTicks);
+                // персистентный КД
+                PlayerSpellCooldowns store = serverPlayer.getData(ModAttachments.PLAYER_SPELL_COOLDOWNS);
+                long now = serverPlayer.serverLevel().getGameTime();
+                store.setReadyTick(cooldownKey, (int) (now + this.cooldownTicks));
             } else {
-                PacketDistributor.sendToPlayer(serverPlayer, new DisplayNotificationPacket(Component.literal("Заклинание перезаряжается!")));
+                // убираем "залипающий" оверлей — используем системное сообщение
+                serverPlayer.sendSystemMessage(Component.literal("Заклинание перезаряжается!"));
             }
         } else {
-            PacketDistributor.sendToPlayer(serverPlayer, new DisplayNotificationPacket(Component.literal("Недостаточно маны!")));
+            serverPlayer.sendSystemMessage(Component.literal("Недостаточно маны!"));
             serverPlayer.playSound(SoundEvents.FIRE_EXTINGUISH, 1.0F, 1.0F);
         }
     }

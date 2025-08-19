@@ -1,12 +1,13 @@
 package msu.msuteam.onlylaststand.inventory;
 import msu.msuteam.onlylaststand.skills.PlayerLearnedSpells;
 import msu.msuteam.onlylaststand.skills.PlayerSkills;
+import msu.msuteam.onlylaststand.skills.PlayerSpellCooldowns;
 import msu.msuteam.onlylaststand.OnlyLastStand;
 import msu.msuteam.onlylaststand.magic.PlayerMana;
 import net.neoforged.neoforge.attachment.AttachmentType;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
-import msu.msuteam.onlylaststand.skills.PlayerSkills;
+
 import java.util.function.Supplier;
 
 public class ModAttachments {
@@ -25,4 +26,8 @@ public class ModAttachments {
             ATTACHMENT_TYPES.register("spell_inventory", () -> AttachmentType.serializable(SpellInventory::new).build());
     public static final Supplier<AttachmentType<PlayerSkills>> PLAYER_SKILLS =
             ATTACHMENT_TYPES.register("player_skills", () -> AttachmentType.serializable(PlayerSkills::new).build());
+
+    // новое: персистентные кулдауны заклинаний
+    public static final Supplier<AttachmentType<PlayerSpellCooldowns>> PLAYER_SPELL_COOLDOWNS =
+            ATTACHMENT_TYPES.register("player_spell_cooldowns", () -> AttachmentType.serializable(PlayerSpellCooldowns::new).build());
 }
