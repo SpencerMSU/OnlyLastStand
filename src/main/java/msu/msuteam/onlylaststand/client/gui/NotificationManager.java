@@ -27,15 +27,15 @@ public class NotificationManager {
         int yOffset = 0;
         for (Notification notification : NOTIFICATIONS) {
             notification.render(guiGraphics, yOffset);
-            yOffset += 12; // Можно уменьшить, если текст будет накладываться
+            yOffset += 12;
         }
     }
 
     private static class Notification {
         private final Component message;
         private int ticksRemaining;
-        // ИЗМЕНЕНО: Время жизни уменьшено в 2 раза (60 -> 30)
-        private static final int MAX_TICKS = 30; // 1.5 секунды
+        // Ускорено: общее время жизни 20 тиков (~1.0с)
+        private static final int MAX_TICKS = 20;
 
         Notification(Component message) {
             this.message = message;
@@ -57,17 +57,17 @@ public class NotificationManager {
             Font font = mc.font;
 
             float alpha = 1.0f;
-            if (this.ticksRemaining < 15) { // Fade out на половине времени
-                alpha = this.ticksRemaining / 15.0f;
+            // Быстрый fade-out за последние 10 тиков
+            if (this.ticksRemaining < 10) {
+                alpha = this.ticksRemaining / 10.0f;
             }
 
             int color = (int) (alpha * 255.0f) << 24 | 0xFFFFFF;
             float yPos = screenHeight / 2.0f - 30 - yOffset + (MAX_TICKS - this.ticksRemaining) * 0.5f;
 
             guiGraphics.pose().pushPose();
-            float scale = 0.7f; // Уменьшаем на 30%
+            float scale = 0.7f;
             guiGraphics.pose().scale(scale, scale, scale);
-
 
             float scaledX = (screenWidth / 2.0f) / scale;
             float scaledY = yPos / scale;
@@ -75,7 +75,6 @@ public class NotificationManager {
             guiGraphics.drawCenteredString(font, this.message, (int) scaledX, (int) scaledY, color);
 
             guiGraphics.pose().popPose();
-
         }
     }
 }

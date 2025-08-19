@@ -58,7 +58,9 @@ public class CosmicMeteorSpell extends SpellItem {
 
                     AABB area = new AABB(blockPos).inflate(3.5);
                     for (LivingEntity entity : level.getEntitiesOfClass(LivingEntity.class, area)) {
-                        entity.hurt(level.damageSources().indirectMagic(player, player), 60.0F);
+                        if (entity != player) { // НЕ наносим урон кастеру
+                            entity.hurt(level.damageSources().indirectMagic(player, player), 60.0F);
+                        }
                     }
                 });
             }, 2500, TimeUnit.MILLISECONDS);

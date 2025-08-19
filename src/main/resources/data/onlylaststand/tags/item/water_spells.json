@@ -1,3 +1,15 @@
 {
-  "values": []
+  "replace": false,
+  "values": [
+    "onlylaststand:water_ripple_dart",
+    "onlylaststand:water_tidal_step",
+    "onlylaststand:water_bubble_prison",
+    "onlylaststand:water_healing_rain",
+    "onlylaststand:water_frost_trident",
+    "onlylaststand:water_maelstrom",
+    "onlylaststand:water_mirror_of_tides",
+    "onlylaststand:water_leviathans_charge",
+    "onlylaststand:water_tsunami",
+    "onlylaststand:water_sirens_aria"
+  ]
 }

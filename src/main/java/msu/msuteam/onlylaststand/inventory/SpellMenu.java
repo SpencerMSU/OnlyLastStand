@@ -1,6 +1,7 @@
 package msu.msuteam.onlylaststand.inventory;
 
 import msu.msuteam.onlylaststand.core.ModMenuTypes;
+import msu.msuteam.onlylaststand.item.spells.SpellItem;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -34,21 +35,65 @@ public class SpellMenu extends AbstractContainerMenu {
 
     @Override
     public void clicked(int pSlotId, int pButton, @NotNull ClickType pClickType, @NotNull Player pPlayer) {
-        // --- ИСПРАВЛЕНИЕ #3: Новая, более надежная логика ---
-        if (pSlotId >= 0 && pSlotId < SpellInventory.SLOTS) {
-            ItemStack carried = this.getCarried();
-            if (!carried.isEmpty() && this.getSlot(pSlotId).mayPlace(carried)) {
-                // Если кликаем с предметом на валидный слот, просто помещаем его туда.
-                // Старый предмет (если он был) будет перезаписан.
-                this.getSlot(pSlotId).set(carried.copy());
-                // Очищаем курсор.
-                this.setCarried(ItemStack.EMPTY);
-                return; // Завершаем обработку.
+        ItemStack carried = this.getCarried();
+
+        // 1) ВНЕ ОКНА/ВЫБРОС: не материализуем виртуальные спеллы
+        if (!carried.isEmpty() && carried.getItem() instanceof SpellItem && (pClickType == ClickType.THROW || pSlotId == -999)) {
+            this.setCarried(ItemStack.EMPTY);
+            return;
+        }
+
+        // 2) Наши слоты заклинаний: "ставим, не забираем старое"
+        if (pSlotId >= 0 && pSlotId < this.slots.size()) {
+            Slot slot = this.getSlot(pSlotId);
+
+            if (slot.container instanceof SpellInventory) {
+                // Переносим с курсора в слот (не забирая старое из слота на курсор)
+                if (pClickType == ClickType.PICKUP && !carried.isEmpty()) {
+                    if (carried.getItem() instanceof SpellItem && slot.mayPlace(carried)) {
+                        slot.set(carried.copy());       // просто перезаписываем содержимое слота
+                        this.setCarried(ItemStack.EMPTY); // очищаем курсор
+                        slot.setChanged();
+                        this.broadcastChanges();
+                        return;
+                    } else {
+                        // Ничего не делаем, если предмет не подходит
+                        return;
+                    }
+                }
+
+                // Если курсор пуст — обычное поведение "взять из слота на курсор" оставляем
+                if (pClickType == ClickType.PICKUP && carried.isEmpty()) {
+                    ItemStack inSlot = slot.getItem();
+                    if (!inSlot.isEmpty()) {
+                        this.setCarried(inSlot.copy());
+                        slot.set(ItemStack.EMPTY);
+                        slot.setChanged();
+                        this.broadcastChanges();
+                        return;
+                    }
+                }
+
+                // Блокируем SWAP/SHIFT-мувы для виртуальных слотов
+                if (pClickType == ClickType.SWAP) {
+                    return;
+                }
             }
         }
-        // Во всех остальных случаях (клик по обычному инвентарю, пустой курсор и т.д.)
-        // используем стандартную логику.
+
+        // 3) Остальное — по умолчанию
         super.clicked(pSlotId, pButton, pClickType, pPlayer);
+    }
+
+    @Override
+    public void removed(Player pPlayer) {
+        // ВАЖНО: при закрытии меню чистим виртуальный предмет на курсоре,
+        // чтобы он не попадал в инвентарь после ESC.
+        ItemStack carried = this.getCarried();
+        if (!carried.isEmpty() && carried.getItem() instanceof SpellItem) {
+            this.setCarried(ItemStack.EMPTY);
+        }
+        super.removed(pPlayer);
     }
 
     @Override
@@ -58,6 +103,7 @@ public class SpellMenu extends AbstractContainerMenu {
 
     @Override
     public @NotNull ItemStack quickMoveStack(@NotNull Player player, int index) {
+        // Запрещаем shift-клик переносы
         return ItemStack.EMPTY;
     }
 }

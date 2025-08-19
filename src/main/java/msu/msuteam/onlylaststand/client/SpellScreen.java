@@ -24,6 +24,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.neoforged.neoforge.network.PacketDistributor;
+import net.minecraft.ChatFormatting;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,23 +52,14 @@ public class SpellScreen extends AbstractContainerScreen<SpellMenu> {
 
     @Override
     public void render(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
-        // ВАЖНО: Вызываем super.render() ПЕРЕД всем остальным.
-        // Это установит hoveredSlot и отрисует фон и слоты.
         super.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
-
-        // Теперь отрисовываем подсказки поверх всего, включая каталог.
         this.renderTooltip(pGuiGraphics, pMouseX, pMouseY);
-
-        // И в самом конце рисуем предмет на курсоре.
         pGuiGraphics.renderItem(this.menu.getCarried(), pMouseX - 8, pMouseY - 8);
     }
 
     @Override
     protected void renderTooltip(GuiGraphics pGuiGraphics, int pX, int pY) {
-        // Сначала вызываем стандартный метод для подсказок над слотами.
         super.renderTooltip(pGuiGraphics, pX, pY);
-
-        // Затем добавляем нашу логику для подсказок над каталогом.
         for (int i = 0; i < this.catalogItems.size(); i++) {
             int col = i % 2;
             int row = i / 2;
@@ -81,14 +73,11 @@ public class SpellScreen extends AbstractContainerScreen<SpellMenu> {
 
     @Override
     protected void renderBg(GuiGraphics pGuiGraphics, float pPartialTick, int pMouseX, int pMouseY) {
-        // Всю нашу кастомную отрисовку переносим сюда.
         renderGuiElements(pGuiGraphics);
     }
 
     @Override
-    protected void renderLabels(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY) {
-        // Оставляем пустым, чтобы не было стандартных надписей "Inventory" и т.д.
-    }
+    protected void renderLabels(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY) {}
 
     private void renderGuiElements(GuiGraphics pGuiGraphics) {
         int x = this.leftPos;
@@ -126,7 +115,6 @@ public class SpellScreen extends AbstractContainerScreen<SpellMenu> {
         for (Slot slot : this.menu.slots) {
             int slotX = x + slot.x;
             int slotY = y + slot.y;
-            // Убираем отрисовку слотов отсюда, так как она теперь в super.render()
             if (slot.index >= unlockedSlots) {
                 pGuiGraphics.renderFakeItem(LOCKED_SLOT_ICON, slotX, slotY);
             }
@@ -135,14 +123,11 @@ public class SpellScreen extends AbstractContainerScreen<SpellMenu> {
 
     @Override
     public boolean mouseClicked(double pMouseX, double pMouseY, int pButton) {
-        // --- ИСПРАВЛЕНИЕ #1: Возвращаем логику для предотвращения выбрасывания ---
         boolean isOutside = pMouseX < this.leftPos || pMouseY < this.topPos || pMouseX >= this.leftPos + this.imageWidth || pMouseY >= this.topPos + this.imageHeight;
         if (pButton == 0 && !this.menu.getCarried().isEmpty() && isOutside) {
-            // Просто очищаем курсор на клиенте. Сервер сделает то же самое при следующем обновлении.
             this.menu.setCarried(ItemStack.EMPTY);
-            return true; // "Съедаем" клик
+            return true;
         }
-        // --------------------------------------------------------------------------
 
         if (pButton == 0) {
             for (int i = 0; i < this.catalogItems.size(); i++) {
@@ -201,7 +186,8 @@ public class SpellScreen extends AbstractContainerScreen<SpellMenu> {
                 this.catalogItems.add(new ItemStack(spellItem));
             } else {
                 ItemStack barrier = new ItemStack(Items.BARRIER);
-                barrier.set(DataComponents.CUSTOM_NAME, spellItem.getDescription());
+                // Обфусцированное имя для закрытых заклинаний
+                barrier.set(DataComponents.CUSTOM_NAME, Component.literal("????????").withStyle(ChatFormatting.OBFUSCATED));
                 this.catalogItems.add(barrier);
             }
         }
