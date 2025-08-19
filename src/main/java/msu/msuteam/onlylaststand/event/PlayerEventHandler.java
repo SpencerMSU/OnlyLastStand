@@ -35,7 +35,6 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.NeoForgeMod;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
-import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
@@ -179,6 +178,7 @@ public class PlayerEventHandler {
 
     @SubscribeEvent
     public static void onLivingIncomingDamage(LivingIncomingDamageEvent event) {
+        // Бонус к урону от уровня боя, если атакующий игрок
         if (event.getSource().getEntity() instanceof Player player) {
             PlayerSkills skills = player.getData(ModAttachments.PLAYER_SKILLS);
             if (skills != null) {
@@ -186,8 +186,20 @@ public class PlayerEventHandler {
                 float damageBonus = 1.0f + (combatLevel * 0.0015f);
                 event.setAmount(event.getAmount() * damageBonus);
             }
+
+            // Эффекты от умений/заклинаний при атаке игрока
+            // Клинки Огня
+            if (player.getPersistentData().contains("BladesOfFireTicks")) {
+                int currentFire = event.getEntity().getRemainingFireTicks();
+                event.getEntity().setRemainingFireTicks(currentFire + 1200); // +1 минута горения
+            }
+            // Помощь Сатаны
+            if (player.getPersistentData().contains("SatansHelpTicks")) {
+                event.getEntity().getPersistentData().putInt("SatanicFireTicks", 200); // 10 секунд особого горения
+            }
         }
 
+        // Дальше логика для игрока-жертвы и сетов
         if (!(event.getEntity() instanceof Player player)) {
             return;
         }
@@ -200,11 +212,9 @@ public class PlayerEventHandler {
 
             if (event.getSource().getEntity() instanceof Ghast || event.getSource().getEntity() instanceof Blaze) {
                 event.setAmount(event.getAmount() * 0.65f);
-            }
-            else if (player.level().dimension().equals(Level.NETHER) && event.getSource().getEntity() instanceof Mob) {
+            } else if (player.level().dimension().equals(Level.NETHER) && event.getSource().getEntity() instanceof Mob) {
                 event.setAmount(event.getAmount() * 0.85f);
-            }
-            else if (event.getSource().is(DamageTypes.LAVA)) {
+            } else if (event.getSource().is(DamageTypes.LAVA)) {
                 event.setAmount(event.getAmount() * 0.30f);
             }
         }
@@ -214,23 +224,6 @@ public class PlayerEventHandler {
                 if (sourcePlayer.isInWaterOrRain() && target.isInWaterOrRain()) {
                     event.setAmount(event.getAmount() * 1.5f);
                 }
-            }
-        }
-    }
-
-    // ИСПРАВЛЕНО: Используем LivingDamageEvent
-    @SubscribeEvent
-    public static void onLivingDamage(LivingDamageEvent event) {
-        // ИСПРАВЛЕНО: Правильный способ получить атакующего
-        if (event.getSource().getEntity() instanceof Player player) {
-            // Клинки Огня
-            if (player.getPersistentData().contains("BladesOfFireTicks")) {
-                int currentFire = event.getEntity().getRemainingFireTicks();
-                event.getEntity().setRemainingFireTicks(currentFire + (1200)); // +1 минута горения
-            }
-            // Помощь Сатаны
-            if (player.getPersistentData().contains("SatansHelpTicks")) {
-                event.getEntity().getPersistentData().putInt("SatanicFireTicks", 200); // 10 секунд особого горения
             }
         }
     }

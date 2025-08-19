@@ -16,6 +16,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.SmeltingRecipe;
+import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CropBlock;
@@ -25,10 +26,10 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.ProjectileImpactEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
-import net.neoforged.neoforge.event.entity.living.LivingEvent;
 import net.neoforged.neoforge.event.entity.living.LivingHealEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
+import net.neoforged.neoforge.event.tick.EntityTickEvent;
 
 import java.util.List;
 import java.util.Optional;
@@ -73,9 +74,10 @@ public class SkillEvents {
                         BlockState state = player.level().getBlockState(pos);
                         if (!state.isAir() && tool.isCorrectToolForDrops(state)) {
                             List<ItemStack> drops = Block.getDrops(state, serverPlayer.serverLevel(), pos, player.level().getBlockEntity(pos), player, tool);
-                            for(ItemStack drop : drops) {
-                                // ИСПРАВЛЕНО: Новый способ получения рецепта
-                                Optional<RecipeHolder<SmeltingRecipe>> recipe = player.level().getRecipeManager().getRecipeFor(RecipeType.SMELTING, new net.minecraft.world.SimpleContainer(drop), player.level());
+                            for (ItemStack drop : drops) {
+                                // Новый способ получения рецепта (1.21.x): SingleRecipeInput вместо SimpleContainer
+                                Optional<RecipeHolder<SmeltingRecipe>> recipe =
+                                        player.level().getRecipeManager().getRecipeFor(RecipeType.SMELTING, new SingleRecipeInput(drop), player.level());
                                 if (recipe.isPresent()) {
                                     ItemStack result = recipe.get().value().getResultItem(player.level().registryAccess());
                                     if (!result.isEmpty()) {
@@ -168,10 +170,11 @@ public class SkillEvents {
         }
     }
 
-    // ИСПРАВЛЕНО: Используем правильный класс ивента - LivingEvent.LivingTickEvent
+    // Заменяем устаревший LivingEvent.LivingTickEvent на EntityTickEvent.Post
     @SubscribeEvent
-    public static void onLivingTick(LivingEvent.LivingTickEvent event) {
-        LivingEntity entity = event.getEntity();
+    public static void onEntityTick(EntityTickEvent.Post event) {
+        if (!(event.getEntity() instanceof LivingEntity entity)) return;
+
         if (!entity.level().isClientSide && entity.getPersistentData().contains("SatanicFireTicks")) {
             int ticks = entity.getPersistentData().getInt("SatanicFireTicks");
             if (ticks > 0) {

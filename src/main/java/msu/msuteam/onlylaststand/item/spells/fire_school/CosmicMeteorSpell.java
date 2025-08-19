@@ -29,7 +29,13 @@ public class CosmicMeteorSpell extends SpellItem {
 
     @Override
     protected void cast(Level level, Player player, ItemStack stack) {
-        BlockHitResult ray = level.clip(new ClipContext(player.getEyePosition(), player.getEyePosition().add(player.getLookAngle().scale(50)), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, player));
+        BlockHitResult ray = level.clip(new ClipContext(
+                player.getEyePosition(),
+                player.getEyePosition().add(player.getLookAngle().scale(50)),
+                ClipContext.Block.COLLIDER,
+                ClipContext.Fluid.NONE,
+                player
+        ));
         Vec3 targetPos = ray.getLocation();
         BlockPos blockPos = BlockPos.containing(targetPos);
 
@@ -40,11 +46,12 @@ public class CosmicMeteorSpell extends SpellItem {
                 double z = targetPos.z() + 1.5 * Math.sin(angle);
                 serverLevel.sendParticles(ParticleTypes.WITCH, x, targetPos.y() + 0.1, z, 1, 0, 0, 0, 0);
             }
+
             level.playSound(null, blockPos, SoundEvents.BEACON_POWER_SELECT, SoundSource.PLAYERS, 1.0f, 1.5f);
 
             Executors.newSingleThreadScheduledExecutor().schedule(() -> {
                 serverLevel.getServer().execute(() -> {
-                    level.playSound(null, blockPos, SoundEvents.GENERIC_EXPLODE, SoundSource.PLAYERS, 2.0F, 0.8F);
+                    level.playSound(null, blockPos, SoundEvents.BEACON_POWER_SELECT, SoundSource.PLAYERS, 1.0f, 1.5f);
                     serverLevel.sendParticles(ParticleTypes.EXPLOSION_EMITTER, targetPos.x, targetPos.y, targetPos.z, 5, 2, 2, 2, 0);
                     serverLevel.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, Blocks.MAGMA_BLOCK.defaultBlockState()), targetPos.x, targetPos.y, targetPos.z, 100, 2, 1, 2, 0.5);
                     serverLevel.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, Blocks.NETHERRACK.defaultBlockState()), targetPos.x, targetPos.y, targetPos.z, 100, 2, 1, 2, 0.5);
