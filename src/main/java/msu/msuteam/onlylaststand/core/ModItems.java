@@ -4,7 +4,7 @@ import msu.msuteam.onlylaststand.OnlyLastStand;
 import msu.msuteam.onlylaststand.item.spells.RandomSpellScrollItem;
 import msu.msuteam.onlylaststand.item.spells.fire_school.*;
 import msu.msuteam.onlylaststand.item.spells.water_school.*;
-import msu.msuteam.onlylaststand.tags.ModTags;
+import msu.msuteam.onlylaststand.util.ModTags;
 import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -53,7 +53,7 @@ public class ModItems {
 
     // ОГНЕННЫЕ заклинания
     public static final DeferredItem<Item> FIRE_PROJECTILE_SPELL = ITEMS.register("fire_projectile_spell", () -> new FireProjectileSpell(new Item.Properties().stacksTo(1)));
-    public static final DeferredItem<Item> DRAGONS_BREATH_SPELL = ITEMS.registerSimpleItem("dragons_breath_spell", new Item.Properties().stacksTo(1)); // плейсхолдер
+    public static final DeferredItem<Item> DRAGONS_BREATH_SPELL = ITEMS.register("dragons_breath_spell", () -> new DragonsBreathSpell(new Item.Properties().stacksTo(1)));
     public static final DeferredItem<Item> MAGMA_BLOOD_SPELL = ITEMS.register("magma_blood_spell", () -> new MagmaBloodSpell(new Item.Properties().stacksTo(1)));
     public static final DeferredItem<Item> FIRE_SHIELD_SPELL = ITEMS.register("fire_shield_spell", () -> new FireShieldSpell(new Item.Properties().stacksTo(1)));
     public static final DeferredItem<Item> FIRE_PILLAR_SPELL = ITEMS.register("fire_pillar_spell", () -> new FirePillarSpell(new Item.Properties().stacksTo(1)));
@@ -63,7 +63,7 @@ public class ModItems {
     public static final DeferredItem<Item> SATANS_HELP_SPELL = ITEMS.register("satans_help_spell", () -> new SatansHelpSpell(new Item.Properties().stacksTo(1)));
     public static final DeferredItem<Item> DEVILS_TOOLS_SPELL = ITEMS.register("devils_tools_spell", () -> new DevilsToolsSpell(new Item.Properties().stacksTo(1)));
 
-    // ВОДНАЯ школа
+    // ВОДНАя школа
     public static final DeferredItem<Item> WATER_RIPPLE_DART = ITEMS.register("water_ripple_dart", () -> new RippleDartSpell(new Item.Properties().stacksTo(1)));
     public static final DeferredItem<Item> WATER_TIDAL_STEP = ITEMS.register("water_tidal_step", () -> new TidalStepSpell(new Item.Properties().stacksTo(1)));
     public static final DeferredItem<Item> WATER_BUBBLE_PRISON = ITEMS.register("water_bubble_prison", () -> new BubblePrisonSpell(new Item.Properties().stacksTo(1)));

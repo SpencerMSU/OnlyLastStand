@@ -1,10 +1,12 @@
 package msu.msuteam.onlylaststand.item.spells;
 
 import msu.msuteam.onlylaststand.inventory.ModAttachments;
+import msu.msuteam.onlylaststand.network.SyncLearnedSpellsPacket;
 import msu.msuteam.onlylaststand.skills.PlayerLearnedSpells;
-import msu.msuteam.onlylaststand.tags.ModTags;
+import msu.msuteam.onlylaststand.util.ModTags;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.TagKey;
@@ -82,6 +84,14 @@ public class RandomSpellScrollItem extends Item {
                 }
                 pLevel.playSound(null, pPlayer.blockPosition(), SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 0.8f, 1.0f);
                 pPlayer.sendSystemMessage(Component.literal("Вы освоили новое заклинание!"));
+
+                // Синхронизируем клиенту список выученных спеллов
+                if (pPlayer instanceof ServerPlayer sp) {
+                    PacketDistributor.sendToPlayer(
+                            sp,
+                            new SyncLearnedSpellsPacket(learned.serializeNBT(sp.registryAccess()))
+                    );
+                }
             } else {
                 if (!pPlayer.isCreative()) {
                     heldStack.shrink(1);
@@ -90,8 +100,6 @@ public class RandomSpellScrollItem extends Item {
                 pPlayer.sendSystemMessage(Component.literal("Не удалось раскрыть следующее заклинание..."));
             }
 
-            // Если у тебя есть пакет синхронизации — оставляем как есть, иначе можно убрать
-            // PacketDistributor.sendToPlayer(...)
             return InteractionResultHolder.success(heldStack);
         }
 

@@ -2,6 +2,7 @@ package msu.msuteam.onlylaststand.item.spells;
 
 import msu.msuteam.onlylaststand.inventory.ModAttachments;
 import msu.msuteam.onlylaststand.magic.PlayerMana;
+import msu.msuteam.onlylaststand.network.DisplayNotificationPacket;
 import msu.msuteam.onlylaststand.skills.PlayerSkill;
 import msu.msuteam.onlylaststand.skills.PlayerSkills;
 import msu.msuteam.onlylaststand.skills.PlayerSpellCooldowns;
@@ -16,6 +17,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.List;
 
@@ -62,11 +64,16 @@ public abstract class SpellItem extends Item {
                 long now = serverPlayer.serverLevel().getGameTime();
                 store.setReadyTick(cooldownKey, (int) (now + this.cooldownTicks));
             } else {
-                // убираем "залипающий" оверлей — используем системное сообщение
-                serverPlayer.sendSystemMessage(Component.literal("Заклинание перезаряжается!"));
+                // HUD-нотификация о том, что умение на КД
+                PacketDistributor.sendToPlayer(serverPlayer, new DisplayNotificationPacket(
+                        Component.literal("Заклинание перезаряжается!")
+                ));
             }
         } else {
-            serverPlayer.sendSystemMessage(Component.literal("Недостаточно маны!"));
+            // HUD-нотификация о нехватке маны + звук
+            PacketDistributor.sendToPlayer(serverPlayer, new DisplayNotificationPacket(
+                    Component.literal("Недостаточно маны!")
+            ));
             serverPlayer.playSound(SoundEvents.FIRE_EXTINGUISH, 1.0F, 1.0F);
         }
     }

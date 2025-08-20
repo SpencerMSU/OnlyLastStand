@@ -2,6 +2,7 @@ package msu.msuteam.onlylaststand.magic;
 
 import msu.msuteam.onlylaststand.OnlyLastStand;
 import msu.msuteam.onlylaststand.inventory.ModAttachments;
+import msu.msuteam.onlylaststand.item.spells.fire_school.FireShieldSpell;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Items;
@@ -26,6 +27,9 @@ public class ManaEvents {
             }
 
             mana.regenerate(regenAmount);
+
+            // Тики для огненного щита
+            FireShieldSpell.onPlayerTick(player);
         }
     }
 

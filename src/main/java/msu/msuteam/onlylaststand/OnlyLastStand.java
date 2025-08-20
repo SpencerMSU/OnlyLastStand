@@ -32,6 +32,11 @@ public class OnlyLastStand {
                 output.accept(ModItems.UPGRADE_SHARD.get());
                 output.accept(ModItems.UPGRADE_STONE.get());
                 output.accept(ModItems.SYNERGY_STONE.get());
+
+                // Свитки школ
+                output.accept(ModItems.FIRE_SPELL_SCROLL.get());
+                output.accept(ModItems.WATER_SPELL_SCROLL.get());
+
                 output.accept(ModItems.FIRE_CROWN.get());
                 output.accept(ModItems.FIRE_AMULET.get());
                 output.accept(ModItems.FIRE_PAULDRON.get());
