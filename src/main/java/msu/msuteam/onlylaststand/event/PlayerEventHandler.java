@@ -3,7 +3,6 @@ package msu.msuteam.onlylaststand.event;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import msu.msuteam.onlylaststand.OnlyLastStand;
-import msu.msuteam.onlylaststand.inventory.AccessoryInventory;
 import msu.msuteam.onlylaststand.inventory.ModAttachments;
 import msu.msuteam.onlylaststand.inventory.SpellInventory;
 import msu.msuteam.onlylaststand.item.accessories.AccessoryItem;
@@ -40,10 +39,12 @@ import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
+import top.theillusivec4.curios.api.CuriosApi;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @EventBusSubscriber(modid = OnlyLastStand.MODID)
 public class PlayerEventHandler {
@@ -59,7 +60,7 @@ public class PlayerEventHandler {
     public static void onPlayerTick(PlayerTickEvent.Post event) {
         Player player = event.getEntity();
         if (!player.level().isClientSide) {
-            if (player.tickCount % 1200 == 0) { // Проверка раз в 60 секунд (1200 тиков)
+            if (player.tickCount % 1200 == 0) {
                 PlayerSkills skills = player.getData(ModAttachments.PLAYER_SKILLS);
                 SpellInventory spellInventory = player.getData(ModAttachments.SPELL_INVENTORY);
                 int unlockedSlots = skills.getUnlockedSpellSlots();
@@ -70,7 +71,6 @@ public class PlayerEventHandler {
                     }
                 }
             }
-            // Вызываем тики для заклинаний, которым это нужно
             FireShieldSpell.onPlayerTick(player);
             SatansHelpSpell.onPlayerTick(player);
         }
@@ -94,9 +94,6 @@ public class PlayerEventHandler {
     @SubscribeEvent
     public static void onEntityJoinLevel(EntityJoinLevelEvent event) {
         if (!event.getLevel().isClientSide() && event.getEntity() instanceof Player player) {
-            AccessoryInventory inventory = player.getData(ModAttachments.ACCESSORY_INVENTORY);
-            inventory.setPlayer(player);
-
             PlayerMana mana = player.getData(ModAttachments.PLAYER_MANA);
             mana.setPlayer(player);
             mana.sync();
@@ -122,25 +119,14 @@ public class PlayerEventHandler {
         }
 
         Multimap<Holder<Attribute>, AttributeModifier> currentMods = HashMultimap.create();
-        AccessoryInventory inventory = player.getData(ModAttachments.ACCESSORY_INVENTORY);
-        if (inventory == null) return;
-
-        for (int i = 0; i < inventory.getSlots(); i++) {
-            ItemStack stack = inventory.getStackInSlot(i);
-            if (stack.getItem() instanceof AccessoryItem accessory) {
-                accessory.getAccessoryAttributeModifiers(stack).modifiers().forEach(entry -> {
-                    currentMods.put(entry.attribute(), entry.modifier());
-                });
-                accessory.onAccessoryTick(stack, player);
-            }
-        }
 
         if (isWearingFullSet(player, CollectionType.FIRE) && player.level().dimension().equals(Level.NETHER)) {
             AttributeModifier netherBonus = new AttributeModifier(
                     FIRE_SET_NETHER_BONUS_ID, 0.15, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL
             );
             currentMods.put(Attributes.ATTACK_DAMAGE, netherBonus);
-        } else if (isWearingFullSet(player, CollectionType.WATER)) {
+        }
+        if (isWearingFullSet(player, CollectionType.WATER)) {
             AttributeModifier swimSpeedBonus = new AttributeModifier(
                     WATER_SET_SWIM_SPEED_ID, 0.15, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL
             );
@@ -171,7 +157,6 @@ public class PlayerEventHandler {
     }
 
     private static void handlePotionEffects(Player player) {
-        player.removeEffect(MobEffects.FIRE_RESISTANCE);
         player.removeEffect(MobEffects.WATER_BREATHING);
 
         if (isWearingFullSet(player, CollectionType.WATER)) {
@@ -181,7 +166,6 @@ public class PlayerEventHandler {
 
     @SubscribeEvent
     public static void onLivingIncomingDamage(LivingIncomingDamageEvent event) {
-        // Бонус к урону от уровня боя, если атакующий игрок
         if (event.getSource().getEntity() instanceof Player player) {
             PlayerSkills skills = player.getData(ModAttachments.PLAYER_SKILLS);
             if (skills != null) {
@@ -190,19 +174,15 @@ public class PlayerEventHandler {
                 event.setAmount(event.getAmount() * damageBonus);
             }
 
-            // Эффекты от умений/заклинаний при атаке игрока
-            // Клинки Огня
             if (player.getPersistentData().contains("BladesOfFireTicks")) {
                 int currentFire = event.getEntity().getRemainingFireTicks();
-                event.getEntity().setRemainingFireTicks(currentFire + 1200); // +1 минута горения
+                event.getEntity().setRemainingFireTicks(currentFire + 1200);
             }
-            // Помощь Сатаны
             if (player.getPersistentData().contains("SatansHelpTicks")) {
-                event.getEntity().getPersistentData().putInt("SatanicFireTicks", 200); // 10 секунд особого горения
+                event.getEntity().getPersistentData().putInt("SatanicFireTicks", 200);
             }
         }
 
-        // Дальше логика для игрока-жертвы и сетов
         if (!(event.getEntity() instanceof Player player)) {
             return;
         }
@@ -221,25 +201,22 @@ public class PlayerEventHandler {
                 event.setAmount(event.getAmount() * 0.30f);
             }
         }
-
-        if (isWearingFullSet(player, CollectionType.WATER)) {
-            if (event.getSource().getEntity() instanceof Player sourcePlayer && event.getEntity() instanceof LivingEntity target) {
-                if (sourcePlayer.isInWaterOrRain() && target.isInWaterOrRain()) {
-                    event.setAmount(event.getAmount() * 1.5f);
-                }
-            }
-        }
     }
 
     public static boolean isWearingFullSet(Player player, CollectionType collection) {
-        AccessoryInventory inventory = player.getData(ModAttachments.ACCESSORY_INVENTORY);
-        if (inventory == null) return false;
-        for (int i = 0; i < AccessoryInventory.SLOTS; i++) {
-            ItemStack stack = inventory.getStackInSlot(i);
-            if (!(stack.getItem() instanceof AccessoryItem accessory) || accessory.getCollectionType() != collection) {
-                return false;
+        // ИСПРАВЛЕНО: Правильный и рабочий способ итерации по инвентарю Curios
+        return CuriosApi.getCuriosInventory(player).map(handler -> {
+            AtomicInteger count = new AtomicInteger(0);
+            var equipped = handler.getEquippedCurios();
+            for (int i = 0; i < equipped.getSlots(); i++) {
+                ItemStack stack = equipped.getStackInSlot(i);
+                if (!stack.isEmpty() && stack.getItem() instanceof AccessoryItem accessory) {
+                    if (accessory.getCollectionType() == collection) {
+                        count.getAndIncrement();
+                    }
+                }
             }
-        }
-        return true;
+            return count.get() >= 9;
+        }).orElse(false);
     }
 }
